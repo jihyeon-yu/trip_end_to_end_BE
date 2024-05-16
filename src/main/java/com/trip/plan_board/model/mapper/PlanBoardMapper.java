@@ -12,7 +12,7 @@ import com.trip.plan_board.model.dto.PlanLikeDto;
 @Mapper
 public interface PlanBoardMapper {
 	List<PlanBoardDto> listArticle();
-	PlanBoardDto getArticleById(String planBoardId);
+	PlanBoardDto detailArticleById(String planBoardId);
 	List<PlanBoardTagDto> listTagById(String planBoardId);
 	List<PlanCommentDto> listCommentById(String planBoardId);
 	List<PlanLikeDto> listLikeById(String planBoardId);

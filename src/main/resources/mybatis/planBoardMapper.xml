@@ -10,7 +10,7 @@
 		from plan_board
 	</select>
 
-	<select id="getArticleById" parameterType="String"
+	<select id="detailArticleById" parameterType="String"
 		resultType="planBoardDto">
 		select * from plan_board
 		where plan_board_id =
