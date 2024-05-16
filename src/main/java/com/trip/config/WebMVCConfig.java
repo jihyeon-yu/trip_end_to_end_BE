@@ -9,7 +9,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan({ "com.ssafy.trip.*.controller", "com.ssafy.trip.util" })
+//@ComponentScan({ "com.ssafy.trip.*.controller", "com.ssafy.trip.util" })
 public class WebMVCConfig implements WebMvcConfigurer {
 
 //    @Override

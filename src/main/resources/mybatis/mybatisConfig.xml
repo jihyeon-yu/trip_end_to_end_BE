@@ -10,13 +10,16 @@
   	<typeAlias type="com.trip.member.model.dto.MemberDto" alias="memberDto"/>
   	<typeAlias type="com.trip.member.model.dto.MemberLoginRequestDto" alias="memberLoginRequestDto"/>
   	<typeAlias type="com.trip.member.model.dto.MemberTypeDto" alias="memberTypeDto"/>
+  	
   	<typeAlias type="com.trip.notice_board.model.dto.NoticeBoardDto" alias="noticeBoardDto"/>
+  	
   	<typeAlias type="com.trip.plan_board.model.dto.PlanBoardDto" alias="planBoardDto"/>
   	<typeAlias type="com.trip.plan_board.model.dto.PlanBoardTagDto" alias="planBoardTagDto"/>
   	<typeAlias type="com.trip.plan_board.model.dto.PlanCommentDto" alias="planCommentDto"/>
   	<typeAlias type="com.trip.plan_board.model.dto.TagGroupDto" alias="tagGroupDto"/>
   	<typeAlias type="com.trip.plan_board.model.dto.TagTypeDto" alias="tagTypeDto"/>
   	<typeAlias type="com.trip.plan_board.model.dto.PlanLikeDto" alias="planLikeDto"/>
+  	
   	<typeAlias type="com.trip.plan.model.dto.BookGroupDto" alias="bookGroupDto"/>
   	<typeAlias type="com.trip.plan.model.dto.PaymentDetailDto" alias="paymentDetailDto"/>
   	<typeAlias type="com.trip.plan.model.dto.PlanDto" alias="planDto"/>
@@ -26,6 +29,7 @@
   	<typeAlias type="com.trip.plan.model.dto.SidoDto" alias="sidoDto"/>
   	<typeAlias type="com.trip.plan.model.dto.GugunDto" alias="gugunDto"/>
   	<typeAlias type="com.trip.plan.model.dto.AttractionInfoDto" alias="attractionInfoDto"/>
+  	
   	<typeAlias type="com.trip.qna_board.model.dto.QnABoardDto" alias="qnaBoardDto"/>
   	<typeAlias type="com.trip.qna_board.model.dto.QnACommentDto" alias="qnaCommentDto"/>
   </typeAliases>
