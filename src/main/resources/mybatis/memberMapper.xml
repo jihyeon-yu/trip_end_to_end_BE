@@ -17,17 +17,15 @@
 	<!-- Select member by id -->
 	<select id="findById" parameterType="String"
 		resultType="memberDto">
-		SELECT member_id, id, password, name, birthdate, image,
-		email_id,
-		email_domain, token, is_active, join_date, type, nickname,
-		sex, area,
-		phone_number, mbti FROM member WHERE id = #{id}
+		SELECT * FROM member WHERE id = #{id}
 	</select>
-
+	
+	<!-- List members -->
 	<select id="listMember" resultType="memberDto">
 		SELECT * FROM member
 	</select>
-
+	
+	<!-- Update member -->
 	<update id="updateMember" parameterType="memberDto">
 		UPDATE member
 		SET password = #{password}, name = #{name}, birthdate = #{birthdate},
@@ -37,11 +35,13 @@
 		#{phoneNumber}, mbti = #{mbti}
 		WHERE id = #{id}
 	</update>
-
+	
+	<!-- Update token -->
 	<update id="updateToken" parameterType="map">
 		UPDATE member SET token = #{token} WHERE id = #{id}
 	</update>
-
+	
+	<!-- Delete member -->
 	<delete id="deleteMember" parameterType="String">
 		DELETE FROM member WHERE id = #{id}
 	</delete>
