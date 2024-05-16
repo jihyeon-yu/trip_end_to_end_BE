@@ -28,7 +28,7 @@ public class PlanBoardServiceImpl implements PlanBoardService {
 	@Override
 	public PlanBoardDetailDto detailArticleById(String planBoardId) {
 		PlanBoardDetailDto planBoardDetailDto = new PlanBoardDetailDto();
-		planBoardDetailDto.setPlanBoard(planBoardMapper.getArticleById(planBoardId));
+		planBoardDetailDto.setPlanBoard(planBoardMapper.detailArticleById(planBoardId));
 		planBoardDetailDto.setCommentList(planBoardMapper.listCommentById(planBoardId));
 		planBoardDetailDto.setTagList(planBoardMapper.listTagById(planBoardId));
 		planBoardDetailDto.setLikeList(planBoardMapper.listLikeById(planBoardId));
