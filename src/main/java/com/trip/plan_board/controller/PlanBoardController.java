@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping(value = "/api/shareplan", produces = "application/json; charset=utf8")
@@ -76,7 +75,7 @@ public class PlanBoardController {
 	}
 	
 	@PutMapping("/{planBoardId}")
-	public ResponseEntity<?> modifyArticle(PlanBoardFormDto planBoard) {
+	public ResponseEntity<?> modifyArticle(@PathVariable String planBoardId, PlanBoardFormDto planBoard) {
 		try {
 			planBoardService.modifyArticle(planBoard);
 			return ResponseEntity.ok().body("{\"msg\":" + "게시글 수정이 완료되었습니다. }");
