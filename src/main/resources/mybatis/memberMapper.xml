@@ -6,27 +6,43 @@
 
 	<!-- Insert a new member -->
 	<insert id="insertMember" parameterType="memberDto">
-		INSERT INTO member (id,
-		password, name, birthdate, image, email_id,
-		email_domain, token,
-		is_active, join_date, type, nickname, sex, area,
-		phone_number, mbti)
-		VALUES (#{id}, #{password}, #{name}, #{birthdate}, #{image},
-		#{emailId},
-		#{emailDomain}, #{token}, #{isActive}, #{joinDate},
-		#{type},
-		#{nickname}, #{sex}, #{area}, #{phoneNumber}, #{mbti})
+		INSERT INTO member
+		(id,password, name, birthdate, image, email_id,email_domain,
+		nickname,sex, area,phone_number, mbti)
+		VALUES (#{id}, #{password},
+		#{name},#{birthdate}, #{image},#{emailId},#{emailDomain},#{nickname},
+		#{sex},#{area}, #{phoneNumber}, #{mbti})
 	</insert>
 
 	<!-- Select member by id -->
 	<select id="findById" parameterType="String"
 		resultType="memberDto">
 		SELECT member_id, id, password, name, birthdate, image,
-		email_id, email_domain, token, is_active,
-		join_date, type, nickname,
-		sex, area, phone_number, mbti
-		FROM member
-		WHERE id = #{id}
+		email_id,
+		email_domain, token, is_active, join_date, type, nickname,
+		sex, area,
+		phone_number, mbti FROM member WHERE id = #{id}
 	</select>
 
+	<select id="listMember" resultType="memberDto">
+		SELECT * FROM member
+	</select>
+
+	<update id="updateMember" parameterType="memberDto">
+		UPDATE member
+		SET password = #{password}, name = #{name}, birthdate = #{birthdate},
+		image = #{image}, email_id = #{emailId}, email_domain =
+		#{emailDomain}, is_active = #{isActive}, type = #{type}, nickname =
+		#{nickname}, sex = #{sex}, area = #{area}, phone_number =
+		#{phoneNumber}, mbti = #{mbti}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updateToken" parameterType="map">
+		UPDATE member SET token = #{token} WHERE id = #{id}
+	</update>
+
+	<delete id="deleteMember" parameterType="String">
+		DELETE FROM member WHERE id = #{id}
+	</delete>
 </mapper>
