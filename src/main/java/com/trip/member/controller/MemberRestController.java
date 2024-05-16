@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,6 +15,9 @@ import com.trip.member.model.dto.MemberDto;
 import com.trip.member.model.dto.MemberLoginRequestDto;
 import com.trip.member.model.service.MemberService;
 import com.trip.security.TokenDto;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
 
 @RestController
 @RequestMapping(value = "/api/members", produces = "application/json; charset=utf8")
@@ -40,14 +44,35 @@ public class MemberRestController {
 			return ResponseEntity.badRequest().body(null);
 		}
 	}
-	
+
 	@GetMapping("/list")
-	public ResponseEntity<List<MemberDto>> listMember(){
+	public ResponseEntity<List<MemberDto>> listMember() {
 		List<MemberDto> memberList = memberService.listMember();
-		if(memberList.size() != 0) {
+		if (memberList.size() != 0) {
 			return ResponseEntity.ok(memberList);
-		}else {
+		} else {
 			return ResponseEntity.badRequest().body(null);
+		}
+	}
+
+	@DeleteMapping("/delete")
+	public ResponseEntity<String> delete(@RequestBody String id){
+		boolean isDeleted = memberService.deleteMember(id);
+		if(isDeleted) {
+			return ResponseEntity.ok(id + " 삭제가 완료되었습니다.");
+		}else {
+			return ResponseEntity.badRequest().body(id + " 회원 삭제에 실패하였습니다.");
+		}
+		
+	}
+	
+	@PutMapping("update/{id}")
+	public  ResponseEntity<String> putMethodName(@PathVariable String id, @RequestBody MemberDto memberDto) {
+		boolean isUpdated = memberService.updateMember(memberDto);
+		if(isUpdated) {
+			return ResponseEntity.ok(memberDto + " 수정이 완료되었습니다.");
+		}else {
+			return ResponseEntity.badRequest().body(" 회원 수정에 실패하였습니다.");
 		}
 	}
 }

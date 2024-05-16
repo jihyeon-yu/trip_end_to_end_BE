@@ -1,15 +1,16 @@
 package com.trip.member.model.service;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
 import com.trip.member.model.dto.MemberDto;
 import com.trip.member.model.dto.MemberLoginRequestDto;
 import com.trip.member.model.mapper.MemberMapper;
 import com.trip.security.JwtUtil;
 import com.trip.security.TokenDto;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -80,7 +81,8 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public boolean deleteMember(String id) {
-        if (memberMapper.findById(id) == null) {
+    	MemberDto memberDto = memberMapper.findById(id);
+        if (memberDto == null) {
             return false; // 해당 아이디가 존재하지 않는 경우
         }
         memberMapper.deleteMember(id);
