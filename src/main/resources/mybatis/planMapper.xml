@@ -4,6 +4,104 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.trip.plan.model.mapper.PlanMapper">
 
-	
+	<insert id="insertPlan" parameterType="planDto">
+		INSERT INTO plan (title,
+		start_date, end_date)
+		VALUES (#{title}, #{startDate}, #{endDate})
+	</insert>
+
+	<select id="searchPlanById" parameterType="String"
+		resultType="PlanDto">
+		SELECT plan_id, title, start_date, end_date
+		FROM plan
+		WHERE
+		plan_id =
+		#{planId}
+	</select>
+
+	<select id="searchLastPlanId" parameterType="String"
+		resultType="String">
+		SELECT MAX(plan_id) FROM plan
+	</select>
+
+
+	<update id="updatePlan" parameterType="planDto">
+		UPDATE plan
+		SET
+		title =
+		#{title}, start_date = #{startDate}, end_date = #{endDate}
+		WHERE
+		plan_id = #{planId}
+	</update>
+
+	<delete id="deletePlan" parameterType="String">
+		DELETE FROM plan WHERE
+		plan_id = #{planId}
+	</delete>
+
+	<insert id="insertPlanMember" parameterType="planGroupDto">
+		INSERT INTO
+		plan_group (plan_id, member_id)
+		VALUES
+		(#{planId}, #{memberId})
+	</insert>
+
+	<delete id="deletePlanMember" parameterType="String">
+		DELETE FROM
+		plan_group WHERE plan_id = #{planId}
+	</delete>
+
+	<insert id="insertPlanSchedule" parameterType="planScheduleDto">
+		INSERT INTO
+		plan_schedule (date, plan_id)
+		VALUES (#{date}, #{planId})
+	</insert>
+
+	<delete id="deletePlanSchedule" parameterType="String">
+		DELETE FROM
+		plan_schedule WHERE plan_id = #{planId}
+	</delete>
+
+	<select id="searchLastPlanScheduleId" parameterType="String"
+		resultType="String">
+		SELECT MAX(plan_schedule_id) FROM plan_schedule
+	</select>
+
+	<insert id="insertPlanLocation" parameterType="planLocationDto">
+		INSERT INTO
+		plan_location (plan_schedule_id, latitude, longitude, content_id,
+		time)
+		VALUES (#{planScheduleId},#{latitude}, #{longitude},
+		#{contentId}, #{time})
+	</insert>
+
+	<delete id="deletePlanLocation" parameterType="String">
+		DELETE FROM
+		plan_location WHERE plan_schedule_id = #{planScheduleId}
+	</delete>
+
+	<insert id="insertBookDetail" parameterType="bookGroupDto">
+		INSERT INTO
+		book_group (plan_id, content)
+		VALUES (#{planId},#{content})
+	</insert>
+
+	<delete id="deleteBookDetail" parameterType="String">
+		DELETE FROM
+		book_group WHERE plan_id = #{planId}
+	</delete>
+
+	<insert id="insertPaymentDetail"
+		parameterType="paymentDetailDto">
+		INSERT INTO payment_detail (member_id, content, date,
+		price, plan_id)
+		VALUES (#{memberId},#{content}, #{date}, #{price},
+		#{planId})
+	</insert>
+
+	<delete id="deletePaymentDetail" parameterType="String">
+		DELETE FROM
+		payment_detail WHERE plan_id = #{plan_id}
+	</delete>
 
 </mapper>
