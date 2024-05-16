@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.trip.plan_board.model.dto.PlanBoardDto;
-import com.trip.plan_board.model.dto.request.PlanBoardDetailRequestDto;
+import com.trip.plan_board.model.dto.response.PlanBoardDetailDto;
 import com.trip.plan_board.model.service.PlanBoardService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,13 +38,12 @@ public class PlanBoardController {
 		}
 	}
 
-	@GetMapping("/detail")
-	public ResponseEntity<?> detailArticleById() {
+	@GetMapping("/detail/{planBoardId}")
+	public ResponseEntity<?> detailArticleById(@PathVariable String planBoardId) {
 		try {
-			String planBoardId = "5";
-			PlanBoardDetailRequestDto planBoardDetailRequestDto = planBoardService.detailArticleById(planBoardId);
+			PlanBoardDetailDto planBoardDetailDto = planBoardService.detailArticleById(planBoardId);
 			ObjectMapper objectMapper = new ObjectMapper();
-			return ResponseEntity.ok().body("{\"article\":" + objectMapper.writeValueAsString(planBoardDetailRequestDto) + "}");
+			return ResponseEntity.ok().body("{\"article\":" + objectMapper.writeValueAsString(planBoardDetailDto) + "}");
 		} catch (Exception e) {
 			return exceptionHandling(e);
 		}

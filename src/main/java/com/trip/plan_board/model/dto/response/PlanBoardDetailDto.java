@@ -1,4 +1,4 @@
-package com.trip.plan_board.model.dto.request;
+package com.trip.plan_board.model.dto.response;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class PlanBoardDetailRequestDto {
+public class PlanBoardDetailDto {
 	private PlanBoardDto planBoard;
 	private List<PlanCommentDto> commentList;
 	private List<PlanBoardTagDto> tagList;
