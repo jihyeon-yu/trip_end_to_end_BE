@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.trip.member.model.mapper.MemberMapper">
+
+	<!-- Insert a new member -->
+	<insert id="insertMember" parameterType="memberDto">
+		INSERT INTO member (id,
+		password, name, birthdate, image, email_id,
+		email_domain, token,
+		is_active, join_date, type, nickname, sex, area,
+		phone_number, mbti)
+		VALUES (#{id}, #{password}, #{name}, #{birthdate}, #{image},
+		#{emailId},
+		#{emailDomain}, #{token}, #{isActive}, #{joinDate},
+		#{type},
+		#{nickname}, #{sex}, #{area}, #{phoneNumber}, #{mbti})
+	</insert>
+
+	<!-- Select member by id -->
+	<select id="findById" parameterType="String"
+		resultType="memberDto">
+		SELECT member_id, id, password, name, birthdate, image,
+		email_id, email_domain, token, is_active,
+		join_date, type, nickname,
+		sex, area, phone_number, mbti
+		FROM member
+		WHERE id = #{id}
+	</select>
+
+</mapper>
