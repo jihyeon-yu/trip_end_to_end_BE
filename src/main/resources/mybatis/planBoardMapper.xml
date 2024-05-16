@@ -6,27 +6,63 @@
 	namespace="com.trip.plan_board.model.mapper.PlanBoardMapper">
 
 	<select id="listArticle" resultType="planBoardDto">
-		SELECT *
-		FROM plan_board
+		select *
+		from plan_board
 	</select>
 
-	<select id="getArticleById" parameterType="String" resultType="planBoardDto">
+	<select id="getArticleById" parameterType="String"
+		resultType="planBoardDto">
 		select * from plan_board
-		where plan_board_id = #{plan_board_id}
+		where plan_board_id =
+		#{plan_board_id}
 	</select>
 
-	<select id="listTagById" parameterType="String" resultType="planBoardTagDto">
+	<select id="listTagById" parameterType="String"
+		resultType="planBoardTagDto">
 		select * from plan_board_tag
-		where plan_board_id = #{plan_board_id}
+		where plan_board_id =
+		#{plan_board_id}
 	</select>
-	
-	<select id="listCommentById" parameterType="String" resultType="planCommentDto">
+
+	<select id="listCommentById" parameterType="String"
+		resultType="planCommentDto">
 		select * from plan_comment
-		where plan_board_id = #{plan_board_id}
+		where plan_board_id =
+		#{plan_board_id}
 	</select>
-	
-	<select id="listLikeById" parameterType="String" resultType="planLikeDto">
+
+	<select id="listLikeById" parameterType="String"
+		resultType="planLikeDto">
 		select * from plan_like
-		where plan_board_id = #{plan_board_id}
+		where plan_board_id =
+		#{plan_board_id}
 	</select>
+
+	<insert id="insertArticle" parameterType="planBoardDto">
+		insert into plan_board (member_id, subject, content, start_date,
+		end_date, the_number_of_members
+		<if test="thumbnail != null">
+			, thumbnail
+		</if>
+		)
+		values (#{memberId}, #{subject}, #{content}, #{startDate},
+		#{endDate}, #{theNumberOfMembers}
+		<if test="thumbnail != null">
+			, #{thumbnail}
+		</if>
+		)
+	</insert>
+
+	<insert id="insertArticleTag" parameterType="planBoardTagDto">
+		insert into
+		plan_board_tag (plan_board_id, tag_type_id)
+		values(#{planBoardId},
+		#{tagTypeId})
+	</insert>
+
+	<delete id="deleteArticle" parameterType="String">
+		delete from plan_board
+		where plan_board_id = #{planBoardId}
+	</delete>
+
 </mapper>

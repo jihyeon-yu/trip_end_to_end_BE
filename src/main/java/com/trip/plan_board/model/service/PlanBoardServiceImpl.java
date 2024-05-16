@@ -5,6 +5,9 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.trip.plan_board.model.dto.PlanBoardDto;
+import com.trip.plan_board.model.dto.PlanBoardTagDto;
+import com.trip.plan_board.model.dto.PlanCommentDto;
+import com.trip.plan_board.model.dto.request.PlanBoardFormDto;
 import com.trip.plan_board.model.dto.response.PlanBoardDetailDto;
 import com.trip.plan_board.model.mapper.PlanBoardMapper;
 
@@ -30,6 +33,26 @@ public class PlanBoardServiceImpl implements PlanBoardService {
 		planBoardDetailDto.setTagList(planBoardMapper.listTagById(planBoardId));
 		planBoardDetailDto.setLikeList(planBoardMapper.listLikeById(planBoardId));
 		return planBoardDetailDto;
+	}
+
+	@Override
+	public void insertArticle(PlanBoardFormDto planBoardFormDto) {
+		planBoardMapper.insertArticle(planBoardFormDto.getPlanBoard());
+		for (PlanBoardTagDto tag : planBoardFormDto.getTagList()) {
+			planBoardMapper.insertArticleTag(tag);
+		}
+	}
+
+	@Override
+	public void deleteArticle(String planBoardId) {
+		// TODO: plan-board delete 요청 -> on cascade 처리?
+		planBoardMapper.deleteArticle(planBoardId);
+	}
+
+	@Override
+	public void modifyArticle(PlanBoardFormDto planBoardFormDto) {
+		planBoardMapper.modifyArticle(planBoardFormDto.getPlanBoard());
+		// TODO: tag 수정 추가하기 
 	}
 
 }
