@@ -2,8 +2,31 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.trip.plan_board.model.mapper.PlanBoardMapper">
+<mapper
+	namespace="com.trip.plan_board.model.mapper.PlanBoardMapper">
 
+	<select id="listArticle" resultType="planBoardDto">
+		SELECT *
+		FROM plan_board
+	</select>
+
+	<select id="getArticleById" parameterType="String" resultType="planBoardDto">
+		select * from plan_board
+		where plan_board_id = #{plan_board_id}
+	</select>
+
+	<select id="listTagById" parameterType="String" resultType="planBoardTagDto">
+		select * from plan_board_tag
+		where plan_board_id = #{plan_board_id}
+	</select>
 	
-
+	<select id="listCommentById" parameterType="String" resultType="planCommentDto">
+		select * from plan_comment
+		where plan_board_id = #{plan_board_id}
+	</select>
+	
+	<select id="listLikeById" parameterType="String" resultType="planLikeDto">
+		select * from plan_like
+		where plan_board_id = #{plan_board_id}
+	</select>
 </mapper>
