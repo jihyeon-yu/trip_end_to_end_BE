@@ -24,9 +24,9 @@
 
 	<insert id="insertArticle" parameterType="noticeBoardDto">
 		insert into
-		notice_board (member_id, subject, content)
+		notice_board (member_id, subject, content, is_fixed)
 		values (#{memberId},
-		#{subject}, #{content})
+		#{subject}, #{content}, #{isFixed})
 	</insert>
 
 	<delete id="deleteArticle" parameterType="String">
@@ -37,7 +37,7 @@
 
 	<update id="modifyArticle" parameterType="noticeBoardDto">
 		update notice_board set
-		subject = #{subject}, content = #{content}
+		subject = #{subject}, content = #{content}, is_fixed = #{isFixed}
 		where notice_board_id =
 		#{noticeBoardId}
 	</update>

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -41,6 +42,7 @@ public class NoticeBoardRestController {
 	public ResponseEntity<?> detailArticleById(@PathVariable String noticeId) {
 		try {
 			NoticeBoardDto noticeBoardDto = noticeBoardService.detailArticleById(noticeId);
+			noticeBoardService.updateHit(noticeId);
 			ObjectMapper objectMapper = new ObjectMapper();
 			return ResponseEntity.ok().body("{\"article\":" + objectMapper.writeValueAsString(noticeBoardDto) + "}");
 		} catch (Exception e) {
@@ -49,7 +51,7 @@ public class NoticeBoardRestController {
 	}
 
 	@PostMapping("/write")
-	public ResponseEntity<?> insertArticle(NoticeBoardDto noticeBoard) {
+	public ResponseEntity<?> insertArticle(@RequestBody NoticeBoardDto noticeBoard) {
 		try {
 			noticeBoardService.insertArticle(noticeBoard);
 			return ResponseEntity.ok().body("{\"msg\" : 공지사항 등록이 완료되었습니다. }");
@@ -59,8 +61,9 @@ public class NoticeBoardRestController {
 	}
 
 	@PutMapping("/{noticeId}")
-	public ResponseEntity<?> modifyArticle(@PathVariable String noticeId, NoticeBoardDto noticeBoard) {
+	public ResponseEntity<?> modifyArticle(@PathVariable String noticeId, @RequestBody NoticeBoardDto noticeBoard) {
 		try {
+			System.out.println(noticeBoard);
 			noticeBoardService.modifyArticle(noticeBoard);
 			return ResponseEntity.ok().body("{\"msg\" : 공지사항 수정이 완료되었습니다. }");
 		} catch (Exception e) {
@@ -69,9 +72,9 @@ public class NoticeBoardRestController {
 	}
 
 	@DeleteMapping("/{noticeId}")
-	public ResponseEntity<?> deleteArticle(@PathVariable String noticeBoard) {
+	public ResponseEntity<?> deleteArticle(@PathVariable String noticeId) {
 		try {
-			noticeBoardService.deleteArticle(noticeBoard);
+			noticeBoardService.deleteArticle(noticeId);
 			return ResponseEntity.ok().body("{\"msg\" : 공지사항 삭제가 완료되었습니다. }");
 		} catch (Exception e) {
 			return exceptionHandling(e);
