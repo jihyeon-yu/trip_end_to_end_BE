@@ -28,21 +28,28 @@
 	<!-- Update member -->
 	<update id="updateMember" parameterType="memberDto">
 		UPDATE member
-		SET password = #{password}, name = #{name}, birthdate = #{birthdate},
+		SET name = #{name}, birthdate = #{birthdate},
 		image = #{image}, email_id = #{emailId}, email_domain =
-		#{emailDomain}, is_active = #{isActive}, type = #{type}, nickname =
+		#{emailDomain}, nickname =
 		#{nickname}, sex = #{sex}, area = #{area}, phone_number =
 		#{phoneNumber}, mbti = #{mbti}
 		WHERE id = #{id}
 	</update>
 	
+	<update id="changePassword" parameterType="memberDto">
+		UPDATE member
+		SET password = #{password}
+		WHERE id = #{id}
+	</update>
 	<!-- Update token -->
 	<update id="updateToken" parameterType="map">
 		UPDATE member SET token = #{token} WHERE id = #{id}
 	</update>
 	
+	
+	
 	<!-- Delete member -->
-	<delete id="deleteMember" parameterType="String">
-		DELETE FROM member WHERE id = #{id}
-	</delete>
+	<update id="deleteMember" parameterType="String">
+		UPDATE member SET is_active = 0 WHERE id = #{id}
+	</update>
 </mapper>
