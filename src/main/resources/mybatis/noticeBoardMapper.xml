@@ -2,8 +2,44 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.trip.notice_board.model.mapper.NoticeBoardMapper">
+<mapper
+	namespace="com.trip.notice_board.model.mapper.NoticeBoardMapper">
+	<select id="listArticle" resultType="noticeBoardDto">
+		select *
+		from notice_board;
+	</select>
 
-	
+	<select id="detailArticleById" parameterType="String"
+		resultType="noticeBoardDto">
+		select * from notice_board
+		where notice_board_id =
+		#{noticeBoardId}
+	</select>
+
+	<update id="updateHit" parameterType="String">
+		update notice_board set hit
+		= hit + 1
+		where notice_board_id = #{noticeBoardId}
+	</update>
+
+	<insert id="insertArticle" parameterType="noticeBoardDto">
+		insert into
+		notice_board (member_id, subject, content, is_fixed)
+		values (#{memberId},
+		#{subject}, #{content}, #{isFixed})
+	</insert>
+
+	<delete id="deleteArticle" parameterType="String">
+		delete from
+		notice_board
+		where notice_board_id = #{noticeBoardId}
+	</delete>
+
+	<update id="modifyArticle" parameterType="noticeBoardDto">
+		update notice_board set
+		subject = #{subject}, content = #{content}, is_fixed = #{isFixed}
+		where notice_board_id =
+		#{noticeBoardId}
+	</update>
 
 </mapper>
