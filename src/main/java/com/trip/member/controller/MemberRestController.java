@@ -56,6 +56,13 @@ public class MemberRestController {
 			return ResponseEntity.badRequest().body(null);
 		}
 	}
+	
+	@GetMapping("/detail/{id}")
+	public ResponseEntity<MemberDto> detailMember(@PathVariable String id){
+		MemberDto memberDto = memberService.findById(id);
+		return ResponseEntity.ok(memberDto);
+		
+	}
 
 	@DeleteMapping("/delete")
 	public ResponseEntity<String> delete(@RequestBody String id){

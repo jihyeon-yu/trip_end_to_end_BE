@@ -16,6 +16,8 @@ public interface MemberService {
 	boolean checkIdDuplication(String id);
 
 	List<MemberDto> listMember();
+	
+	MemberDto findById(String memberId);
 
 	boolean updateMember(MemberDto memberDto);
 
