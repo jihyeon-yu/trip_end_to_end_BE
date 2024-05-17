@@ -53,16 +53,71 @@
 		)
 	</insert>
 
-	<insert id="insertArticleTag" parameterType="planBoardTagDto">
-		insert into
-		plan_board_tag (plan_board_id, tag_type_id)
-		values(#{planBoardId},
-		#{tagTypeId})
-	</insert>
+	<update id="modifyArticle" parameterType="planBoardDto">
+		update plan_board
+		set
+		subject = #{subject}, content = #{content}, start_date = #{startDate},
+		end_date = #{endDate}, the_number_of_members = #{theNumberOfMembers},
+		thumbnail = #{thumbNail}
+		where plan_board_id = #{planBoardId}
+	</update>
+
+	<update id="updateHit" parameterType="String">
+		update plan_board
+		set hit =
+		hit + 1
+		where plan_board_id = #{planBoardId}
+	</update>
 
 	<delete id="deleteArticle" parameterType="String">
 		delete from plan_board
 		where plan_board_id = #{planBoardId}
 	</delete>
 
+	<!-- Tag -->
+	<insert id="insertTag" parameterType="planBoardTagDto">
+		insert into
+		plan_board_tag
+		(plan_board_id, tag_type_id)
+		values(#{planBoardId},
+		#{tagTypeId})
+	</insert>
+	<delete id="deleteTag" parameterType="String">
+		delete from
+		plan_board_tag
+		where plan_board_tag_id = #{tagId}
+	</delete>
+
+	<!-- Comment -->
+	<insert id="insertComment" parameterType="planCommentDto">
+		insert into
+		plan_comment
+		(plan_board_id, member_id, content, depth, commentGroup)
+		values(#{planBoardId}, #{memberId}, #{content}, #{depth},
+		#{commentGroup})
+	</insert>
+	<update id="deleteComment" parameterType="String">
+		update plan_comment
+		set
+		deleted = 1
+		where comment_id = #{commentId}
+	</update>
+	<update id="modifyComment" parameterType="planCommentDto">
+		update plan_comment
+		set
+		content = #{content}
+		where comment_id = #{commentId}
+	</update>
+
+	<!-- Like -->
+	<insert id="insertLike" parameterType="planLikeDto">
+		insert into plan_like
+		(member_id, plan_board_id)
+		values (#{memberId}, #{planBoardId})
+	</insert>
+	<delete id="deleteLike" parameterType="String">
+		delete from
+		plan_like
+		where plan_like_id = #{planLikeId}
+	</delete>
 </mapper>

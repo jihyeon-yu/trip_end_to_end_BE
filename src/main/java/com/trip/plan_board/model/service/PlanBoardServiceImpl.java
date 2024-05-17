@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.trip.plan_board.model.dto.PlanBoardDto;
 import com.trip.plan_board.model.dto.PlanBoardTagDto;
 import com.trip.plan_board.model.dto.PlanCommentDto;
+import com.trip.plan_board.model.dto.PlanLikeDto;
 import com.trip.plan_board.model.dto.request.PlanBoardFormDto;
 import com.trip.plan_board.model.dto.response.PlanBoardDetailDto;
 import com.trip.plan_board.model.mapper.PlanBoardMapper;
@@ -39,20 +40,62 @@ public class PlanBoardServiceImpl implements PlanBoardService {
 	public void insertArticle(PlanBoardFormDto planBoardFormDto) {
 		planBoardMapper.insertArticle(planBoardFormDto.getPlanBoard());
 		for (PlanBoardTagDto tag : planBoardFormDto.getTagList()) {
-			planBoardMapper.insertArticleTag(tag);
+			planBoardMapper.insertTag(tag);
 		}
 	}
 
 	@Override
 	public void deleteArticle(String planBoardId) {
-		// TODO: plan-board delete 요청 -> on cascade 처리?
 		planBoardMapper.deleteArticle(planBoardId);
 	}
 
 	@Override
 	public void modifyArticle(PlanBoardFormDto planBoardFormDto) {
 		planBoardMapper.modifyArticle(planBoardFormDto.getPlanBoard());
-		// TODO: tag 수정 추가하기 
+		planBoardMapper.deleteTag(planBoardFormDto.getPlanBoard().getPlanBoardId());
+		for (PlanBoardTagDto tag : planBoardFormDto.getTagList()) {
+			planBoardMapper.insertTag(tag);
+		}
+	}
+	
+	@Override
+	public void updateHit(String planBoardId) {
+		planBoardMapper.updateHit(planBoardId);
+	}
+
+	@Override
+	public void insertComment(PlanCommentDto planCommentDto) {
+		planBoardMapper.insertComment(planCommentDto);
+	}
+
+	@Override
+	public void deleteComment(String commentId) {
+		planBoardMapper.deleteComment(commentId);
+	}
+
+	@Override
+	public void modifyComment(PlanCommentDto planCommentDto) {
+		planBoardMapper.modifyComment(planCommentDto);
+	}
+
+	@Override
+	public void insertTag(PlanBoardTagDto planBoardTagDto) {
+		planBoardMapper.insertTag(planBoardTagDto);
+	}
+
+	@Override
+	public void deleteTag(String planBoardTagId) {
+		planBoardMapper.deleteTag(planBoardTagId);
+	}
+
+	@Override
+	public void insertLike(PlanLikeDto planLikeDto) {
+		planBoardMapper.insertLike(planLikeDto);
+	}
+
+	@Override
+	public void deleteLike(String likeId) {
+		planBoardMapper.deleteLike(likeId);
 	}
 
 }
