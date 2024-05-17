@@ -3,6 +3,7 @@ package com.trip.member.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.trip.member.model.dto.MemberDto;
 import com.trip.member.model.dto.MemberLoginRequestDto;
 import com.trip.member.model.service.MemberService;
@@ -75,8 +77,8 @@ public class MemberRestController {
 		
 	}
 	
-	@PutMapping("update/{id}")
-	public  ResponseEntity<String> putMethodName(@PathVariable String id, @RequestBody MemberDto memberDto) {
+	@PutMapping("/update/{id}")
+	public  ResponseEntity<String> update(@PathVariable String id, @RequestBody MemberDto memberDto) {
 		boolean isUpdated = memberService.updateMember(memberDto);
 		if(isUpdated) {
 			return ResponseEntity.ok(memberDto + " 수정이 완료되었습니다.");
