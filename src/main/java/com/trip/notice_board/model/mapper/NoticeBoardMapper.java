@@ -9,9 +9,14 @@ import com.trip.notice_board.model.dto.NoticeBoardDto;
 @Mapper
 public interface NoticeBoardMapper {
 	List<NoticeBoardDto> listArticle();
+
 	NoticeBoardDto detailArticleById(String noticeBoardId);
+
 	void updateHit(String noticeBoardId);
+
 	void insertArticle(NoticeBoardDto noticeBoardDto);
+
 	void deleteArticle(String noticeBoardId);
+
 	void modifyArticle(NoticeBoardDto noticeBoardDto);
 }
