@@ -30,10 +30,8 @@ public class MemberServiceImpl implements MemberService {
         if (memberDto != null && passwordEncoder.matches(memberLoginRequestDto.getPassword(), memberDto.getPassword())) {
             String accessToken = jwtUtil.generateAccessToken(memberDto.getId());
             String refreshToken = jwtUtil.generateRefreshToken(memberDto.getId());
-
             // refreshToken을 데이터베이스에 저장
             memberMapper.updateToken(memberDto.getId(), refreshToken);
-
             return new TokenDto(accessToken, refreshToken);
         }
         return null;

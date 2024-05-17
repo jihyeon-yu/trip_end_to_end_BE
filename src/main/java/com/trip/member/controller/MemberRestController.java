@@ -27,8 +27,10 @@ public class MemberRestController {
 
 	@PostMapping("/signup")
 	public ResponseEntity<String> signup(@RequestBody MemberDto memberDto) {
+		System.out.println(memberDto);
 		boolean isRegistered = memberService.signup(memberDto);
 		if (isRegistered) {
+			System.out.println("회원가입완료");
 			return ResponseEntity.ok("회원가입이 완료되었습니다.");
 		} else {
 			return ResponseEntity.badRequest().body("회원가입에 실패하였습니다.");
