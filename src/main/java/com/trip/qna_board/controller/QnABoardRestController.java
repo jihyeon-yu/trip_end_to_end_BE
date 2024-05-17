@@ -1,6 +1,7 @@
 package com.trip.qna_board.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,13 +12,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.trip.qna_board.model.dto.QnABoardDto;
 import com.trip.qna_board.model.dto.QnACommentDto;
 import com.trip.qna_board.model.dto.response.QnABoardDetailDto;
+import com.trip.qna_board.model.dto.response.QnABoardListItemDto;
 import com.trip.qna_board.model.service.QnABoardService;
+import com.trip.util.PageNavigation;
 
 @RestController
 @RequestMapping(value = "/api/qna", produces = "application/json; charset=utf8")
@@ -30,11 +34,23 @@ public class QnABoardRestController {
 	}
 
 	@GetMapping("/list")
-	public ResponseEntity<?> listArticle() {
+	public ResponseEntity<?> listArticle(@RequestParam Map<String, String> map) {
 		try {
-			List<QnABoardDto> list = qnaBoardService.listArticle();
+			if (!map.containsKey("pgno") && !map.containsKey("key") && !map.containsKey("word")) {
+				map.put("pgno", "1");
+				map.put("key", "");
+				map.put("word", "");
+			}
+			List<QnABoardListItemDto> list = qnaBoardService.listArticle(map);
+			System.out.println(list);
+			PageNavigation pageNavigation = qnaBoardService.makePageNavigation(map);
 			ObjectMapper objectMapper = new ObjectMapper();
-			return ResponseEntity.ok().body("{\"articles\":" + objectMapper.writeValueAsString(list) + "}");
+			String settingJson = objectMapper.writeValueAsString(map);
+			String articlesJson = objectMapper.writeValueAsString(list);
+			String navigationJson = objectMapper.writeValueAsString(pageNavigation);
+
+			return ResponseEntity.ok().body("{\"setting\": " + settingJson + ", \"articles\": " + articlesJson
+					+ ", \"pageNavigation\": " + navigationJson + "}");
 		} catch (Exception e) {
 			return exceptionHandling(e);
 		}
@@ -52,11 +68,10 @@ public class QnABoardRestController {
 		}
 	}
 
-	@PostMapping("/write")
+	@PostMapping("/insert")
 	public ResponseEntity<?> insertArticle(@RequestBody QnABoardDto qnaBoardDto) {
 		try {
 			qnaBoardService.insertArticle(qnaBoardDto);
-			System.out.println(qnaBoardDto);
 			return ResponseEntity.ok().body("{\"msg\" : 게시글 등록이 완료되었습니다. }");
 		} catch (Exception e) {
 			return exceptionHandling(e);

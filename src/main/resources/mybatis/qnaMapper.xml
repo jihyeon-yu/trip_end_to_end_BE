@@ -4,8 +4,26 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper
 	namespace="com.trip.qna_board.model.mapper.QnABoardMapper">
-	<select id="listArticle" resultType="qnaBoardDto">
-		select * from qna_board
+	<select id="listArticle" parameterType="map"
+		resultType="qnaBoardListItemDto">
+		select 
+		b.qna_board_id qnaBoardId, 
+		b.member_id memberId,
+		b.hit hit, 
+		b.subject subject,
+		b.content content, 
+		b.register_time registerTime, 
+		b.secret secret, 
+		b.password password,
+		b.is_answered isAnswered, 
+		case when m.is_active = 1
+		then m.nickname 
+		else '(탈퇴한 회원)' end as nickname
+		from qna_board b
+		left join member m 
+		on b.member_id = m.member_id
+		order by b.qna_board_id desc
+		limit #{start}, #{listsize}
 	</select>
 
 	<select id="detailArticleById" parameterType="String"
@@ -48,19 +66,19 @@
 		where qna_board_id =
 		#{qnaBoardId}
 	</update>
-	
+
 	<update id="updateStateToAnswered" parameterType="String">
 		update
 		qna_board
 		set isAnswered = 1
 	</update>
-	
+
 	<update id="updateStateToUnAnswered" parameterType="String">
 		update
 		qna_board
 		set isAnswered = 0
 	</update>
-	
+
 	<select id="listComment" parameterType="String"
 		resultType="qnaCommentDto">
 		select * from qna_comment
@@ -86,4 +104,19 @@
 		content = #{content}
 		where comment_id = #{commentId}
 	</update>
+
+	<select id="getTotalArticleCount" parameterType="map"
+		resultType="int">
+		select count(b.qna_board_id)
+		from qna_board b
+		<if test="word != null and word != ''">
+			<if test="key == 'subject'">
+				where b.subject like concat('%', #{word}, '%')
+			</if>
+			<if test="key != 'subject'">
+				where ${key} = #{word}
+			</if>
+		</if>
+	</select>
+
 </mapper>

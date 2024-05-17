@@ -32,6 +32,7 @@
   	
   	<typeAlias type="com.trip.qna_board.model.dto.QnABoardDto" alias="qnaBoardDto"/>
   	<typeAlias type="com.trip.qna_board.model.dto.QnACommentDto" alias="qnaCommentDto"/>
+  	<typeAlias type="com.trip.qna_board.model.dto.response.QnABoardListItemDto" alias="qnaBoardListItemDto"/>
   </typeAliases>
   <mappers>
     <mapper resource="mybatis/memberMapper.xml" />
