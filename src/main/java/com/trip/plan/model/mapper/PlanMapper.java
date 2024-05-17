@@ -36,6 +36,12 @@ public interface PlanMapper {
 	
 	void updatePlanMember(PlanGroupDto planGroupDto);
 	
+	void updateBookDetail(BookGroupDto bookGroupDto);
+	
+	void updatePlanSchule(PlanScheduleDto planScheduleDto);
+	
+	void updatePaymentDetail(PaymentDetailDto paymentDetailDto);
+	
 	void deletePlan(String planId);
 	
 	void insertPlanMember(PlanGroupDto planGroupDto);

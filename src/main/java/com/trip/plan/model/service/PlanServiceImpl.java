@@ -80,7 +80,7 @@ public class PlanServiceImpl implements PlanService {
 		plan.setMemberIds(planMapper.searchPlanGroup(planId));
 		// 예약 내역 조회
 		plan.setBookContents(planMapper.searchBookGroup(planId));
-		// 여행 기간별 일자 조회
+		// 여행 기간 일자별 조회
 		List<PlanScheduleDto> planSchedule = planMapper.searchPlanSchedule(planId);
 		plan.setScheduleDates(planSchedule);
 		// 일자별 방문 장소 조회
@@ -102,8 +102,28 @@ public class PlanServiceImpl implements PlanService {
 
 	@Override
 	public void updatePlan(PlanRequestDto planRequestDto) {
-		// TODO Auto-generated method stub
+		// plan 정보 수정
+		PlanDto planDto = planRequestDto.getPlanDto();
+		System.out.println(planDto);
+		planMapper.updatePlan(planDto);
+		// 예약 내역 수정
+		List<BookGroupDto> bookGroupDtoList = planRequestDto.getBookContents();
+		System.out.println(bookGroupDtoList);
+		for(BookGroupDto bookGroupDto : bookGroupDtoList) {
+			planMapper.updateBookDetail(bookGroupDto);
+		}
+		// 여행 기간 일자별 수정
+		List<PlanScheduleDto> planScheduleDtoList = planRequestDto.getScheduleDates();
+		for(PlanScheduleDto planScheduleDto : planScheduleDtoList) {
+			planMapper.updatePlanSchule(planScheduleDto);
+		}
+		// 결제 내역 수정
+		List<PaymentDetailDto> paymentDetailDtoList = planRequestDto.getPaymentDetails();
+		for(PaymentDetailDto paymentDetailDto : paymentDetailDtoList) {
+			planMapper.updatePaymentDetail(paymentDetailDto);
+		}
 		
+		// Location, planGroup은 수정 없이 삭제만 가능
 	}
 
 }

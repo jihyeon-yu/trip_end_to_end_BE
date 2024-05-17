@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.trip.plan.model.dto.PlanDto;
@@ -50,9 +51,9 @@ public class PlanRestController {
 	}
 	
 	@PutMapping("/update/{planId}")
-	public ResponseEntity<String> updatePlan(@PathVariable PlanRequestDto planRequestDto) {
+	public ResponseEntity<String> updatePlan(@RequestBody PlanRequestDto planRequestDto) {
 		planService.updatePlan(planRequestDto);
-		return ResponseEntity.ok("삭제가 완료되었습니다.");
+		return ResponseEntity.ok("수정이 완료되었습니다.");
 	}
 	
 
