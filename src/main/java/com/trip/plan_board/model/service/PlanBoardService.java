@@ -2,8 +2,6 @@ package com.trip.plan_board.model.service;
 
 import java.util.List;
 
-import org.springframework.web.bind.annotation.PathVariable;
-
 import com.trip.plan_board.model.dto.PlanBoardDto;
 import com.trip.plan_board.model.dto.PlanBoardTagDto;
 import com.trip.plan_board.model.dto.PlanCommentDto;

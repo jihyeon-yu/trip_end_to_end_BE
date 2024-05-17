@@ -69,7 +69,7 @@ public class NoticeBoardRestController {
 	}
 
 	@DeleteMapping("/{noticeId}")
-	public ResponseEntity<?> deleteArticle(String noticeBoard) {
+	public ResponseEntity<?> deleteArticle(@PathVariable String noticeBoard) {
 		try {
 			noticeBoardService.deleteArticle(noticeBoard);
 			return ResponseEntity.ok().body("{\"msg\" : 공지사항 삭제가 완료되었습니다. }");

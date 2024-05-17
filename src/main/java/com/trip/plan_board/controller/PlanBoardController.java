@@ -97,7 +97,7 @@ public class PlanBoardController {
 	public ResponseEntity<?> insertComment(PlanCommentDto planCommentDto) {
 		try {
 			planBoardService.insertComment(planCommentDto);
-			return ResponseEntity.ok().body("{\"msg\":" + "댓글 추가가 완료되었습니다. }");
+			return ResponseEntity.ok().body("{\"msg\":" + "댓글 등록이 완료되었습니다. }");
 		} catch (Exception e) {
 			return exceptionHandling(e);
 		}
@@ -128,7 +128,7 @@ public class PlanBoardController {
 	public ResponseEntity<?> insertTag(PlanBoardTagDto planBoardTagDto) {
 		try {
 			planBoardService.insertTag(planBoardTagDto);
-			return ResponseEntity.ok().body("{\"msg\":" + "태그 추가가 완료되었습니다. }");
+			return ResponseEntity.ok().body("{\"msg\":" + "태그 등록이 완료되었습니다. }");
 		} catch (Exception e) {
 			return exceptionHandling(e);
 		}
@@ -149,7 +149,7 @@ public class PlanBoardController {
 	public ResponseEntity<?> insertLike(PlanLikeDto planLikeDto) {
 		try {
 			planBoardService.insertLike(planLikeDto);
-			return ResponseEntity.ok().body("{\"msg\":" + "좋아요 추가가 완료되었습니다. }");
+			return ResponseEntity.ok().body("{\"msg\":" + "좋아요 등록이 완료되었습니다. }");
 		} catch (Exception e) {
 			return exceptionHandling(e);
 		}
