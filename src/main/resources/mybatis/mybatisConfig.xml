@@ -10,6 +10,7 @@
   	<typeAlias type="com.trip.member.model.dto.MemberDto" alias="memberDto"/>
   	<typeAlias type="com.trip.member.model.dto.MemberLoginRequestDto" alias="memberLoginRequestDto"/>
   	<typeAlias type="com.trip.member.model.dto.MemberTypeDto" alias="memberTypeDto"/>
+  	<typeAlias type="com.trip.member.model.dto.MemberChangePasswordDto" alias="memberChangePasswordDto"/>
   	
   	<typeAlias type="com.trip.notice_board.model.dto.NoticeBoardDto" alias="noticeBoardDto"/>
   	

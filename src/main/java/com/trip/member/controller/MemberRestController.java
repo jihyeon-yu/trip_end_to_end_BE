@@ -4,19 +4,19 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.trip.member.model.dto.MemberChangePasswordDto;
 import com.trip.member.model.dto.MemberDto;
 import com.trip.member.model.dto.MemberLoginRequestDto;
 import com.trip.member.model.service.MemberService;
 import com.trip.security.TokenDto;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 
 @RestController
@@ -27,8 +27,10 @@ public class MemberRestController {
 
 	@PostMapping("/signup")
 	public ResponseEntity<String> signup(@RequestBody MemberDto memberDto) {
+		System.out.println(memberDto);
 		boolean isRegistered = memberService.signup(memberDto);
 		if (isRegistered) {
+			System.out.println("회원가입완료");
 			return ResponseEntity.ok("회원가입이 완료되었습니다.");
 		} else {
 			return ResponseEntity.badRequest().body("회원가입에 실패하였습니다.");
@@ -54,8 +56,15 @@ public class MemberRestController {
 			return ResponseEntity.badRequest().body(null);
 		}
 	}
+	
+	@GetMapping("/detail/{id}")
+	public ResponseEntity<MemberDto> detailMember(@PathVariable String id){
+		MemberDto memberDto = memberService.findById(id);
+		return ResponseEntity.ok(memberDto);
+		
+	}
 
-	@DeleteMapping("/delete")
+	@PutMapping("/delete")
 	public ResponseEntity<String> delete(@RequestBody String id){
 		boolean isDeleted = memberService.deleteMember(id);
 		if(isDeleted) {
@@ -66,13 +75,25 @@ public class MemberRestController {
 		
 	}
 	
-	@PutMapping("update/{id}")
-	public  ResponseEntity<String> putMethodName(@PathVariable String id, @RequestBody MemberDto memberDto) {
+	@PutMapping("/update/{id}")
+	public  ResponseEntity<String> updateMember(@PathVariable String id, @RequestBody MemberDto memberDto) {
+		memberDto.setId(id);
 		boolean isUpdated = memberService.updateMember(memberDto);
 		if(isUpdated) {
-			return ResponseEntity.ok(memberDto + " 수정이 완료되었습니다.");
+			return ResponseEntity.ok("수정이 완료되었습니다.");
 		}else {
 			return ResponseEntity.badRequest().body(" 회원 수정에 실패하였습니다.");
 		}
+	}
+	
+	@PutMapping("/changepassword")
+	public ResponseEntity<String> changePassword(@RequestBody MemberChangePasswordDto memberChangePassword){
+		boolean isChanged = memberService.changePassword(memberChangePassword);
+		if(isChanged) {
+			return ResponseEntity.ok("비밀번호 변경이 완료되었습니다.");
+		}else {
+			return ResponseEntity.ok("비밀번호 변경에 실패하였습니다.");
+		}
+		
 	}
 }

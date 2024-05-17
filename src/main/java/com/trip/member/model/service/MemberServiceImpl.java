@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.trip.member.model.dto.MemberChangePasswordDto;
 import com.trip.member.model.dto.MemberDto;
 import com.trip.member.model.dto.MemberLoginRequestDto;
 import com.trip.member.model.mapper.MemberMapper;
@@ -30,10 +31,8 @@ public class MemberServiceImpl implements MemberService {
         if (memberDto != null && passwordEncoder.matches(memberLoginRequestDto.getPassword(), memberDto.getPassword())) {
             String accessToken = jwtUtil.generateAccessToken(memberDto.getId());
             String refreshToken = jwtUtil.generateRefreshToken(memberDto.getId());
-
             // refreshToken을 데이터베이스에 저장
             memberMapper.updateToken(memberDto.getId(), refreshToken);
-
             return new TokenDto(accessToken, refreshToken);
         }
         return null;
@@ -74,7 +73,7 @@ public class MemberServiceImpl implements MemberService {
         if (memberMapper.findById(memberDto.getId()) == null) {
             return false; // 해당 아이디가 존재하지 않는 경우
         }
-        memberDto.setPassword(passwordEncoder.encode(memberDto.getPassword()));
+        
         memberMapper.updateMember(memberDto);
         return true;
     }
@@ -88,4 +87,26 @@ public class MemberServiceImpl implements MemberService {
         memberMapper.deleteMember(id);
         return true;
     }
+
+	@Override
+	public MemberDto findById(String memberId) {
+		return memberMapper.findById(memberId);
+	}
+
+	@Override
+	public boolean changePassword(MemberChangePasswordDto memberChangePasswordDto) {
+		MemberDto member = memberMapper.findById(memberChangePasswordDto.getId());
+		if(member == null) {
+			return false;
+		}
+		
+		// 현재 비밀번호가 일치하는지 확인
+		if(!passwordEncoder.matches(memberChangePasswordDto.getCurrentPassword(), member.getPassword())) {
+			return false;
+		}
+		
+		member.setPassword(passwordEncoder.encode(memberChangePasswordDto.getNewPassword()));
+		memberMapper.changePassword(member);
+		return true;
+	}
 }

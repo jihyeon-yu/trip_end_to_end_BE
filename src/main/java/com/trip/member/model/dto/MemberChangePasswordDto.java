@@ -1,4 +1,4 @@
-package com.trip.plan.model.dto;
+package com.trip.member.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,10 +11,9 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class PlanDto {
-	private String planId;
-	private String memberId;
-	private String title;
-	private String startDate;
-	private String endDate;
+public class MemberChangePasswordDto {
+	private String id;
+	private String currentPassword;
+	private String newPassword;
+	private String newPasswordCheck;
 }
