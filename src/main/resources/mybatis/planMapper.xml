@@ -5,20 +5,55 @@
 <mapper namespace="com.trip.plan.model.mapper.PlanMapper">
 
 	<insert id="insertPlan" parameterType="planDto">
-		INSERT INTO plan (title,
+		INSERT INTO plan (title, member_id,
 		start_date, end_date)
-		VALUES (#{title}, #{startDate}, #{endDate})
+		VALUES (#{title}, #{memberId}, #{startDate}, #{endDate})
 	</insert>
 
-	<select id="searchPlanById" parameterType="String"
-		resultType="PlanDto">
-		SELECT plan_id, title, start_date, end_date
+	<select id="searchPlanList" parameterType="String" resultType="planDto">
+		SELECT *
 		FROM plan
 		WHERE
-		plan_id =
-		#{planId}
+		member_id =
+		#{memberId}
+	</select>
+	
+	<select id="searchPlanByPlanId" parameterType="String" resultType="planDto">
+		SELECT *
+		FROM plan
+		WHERE plan_id = #{planId}
 	</select>
 
+	<select id="searchPlanGroup" parameterType="String" resultType="planGroupDto">
+		SELECT *
+		FROM plan_group
+		WHERE plan_id = #{planId}
+	</select>
+	
+	<select id="searchBookGroup" parameterType="String" resultType="bookGroupDto">
+		SELECT *
+		FROM book_group
+		WHERE plan_id = #{planId}
+	</select>
+	
+	<select id="searchPaymentDetail" parameterType="String" resultType="paymentDetailDto">
+		SELECT *
+		FROM payment_detail
+		WHERE plan_id = #{planId}
+	</select>
+	
+	<select id="searchPlanSchedule" parameterType="String" resultType="planScheduleDto">
+		SELECT *
+		FROM plan_schedule
+		WHERE plan_id = #{planId}
+	</select>
+	
+	<select id="searchPlanLocation" parameterType="String" resultType="planLocationDto">
+		SELECT *
+		FROM plan_location
+		WHERE plan_schedule_id = #{planScheduleId}
+	</select>
+	
 	<select id="searchLastPlanId" parameterType="String"
 		resultType="String">
 		SELECT MAX(plan_id) FROM plan
