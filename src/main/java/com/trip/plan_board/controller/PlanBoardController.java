@@ -1,18 +1,23 @@
 package com.trip.plan_board.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.trip.plan_board.model.dto.AttractionInfoDto;
+import com.trip.plan_board.model.dto.GugunDto;
 import com.trip.plan_board.model.dto.PlanBoardDto;
 import com.trip.plan_board.model.dto.PlanBoardTagDto;
 import com.trip.plan_board.model.dto.PlanCommentDto;
 import com.trip.plan_board.model.dto.PlanLikeDto;
+import com.trip.plan_board.model.dto.SidoDto;
 import com.trip.plan_board.model.dto.request.PlanBoardFormDto;
 import com.trip.plan_board.model.dto.response.PlanBoardDetailDto;
 import com.trip.plan_board.model.service.PlanBoardService;
@@ -163,8 +168,42 @@ public class PlanBoardController {
 			return exceptionHandling(e);
 		}
 	}
-
-	private ResponseEntity<String> exceptionHandling(Exception e) {
+	
+	/* map */
+	@GetMapping("/map/sido")
+	public ResponseEntity<?> getSido() {
+		try {
+			List<SidoDto> list = planBoardService.getSidoList();
+			ObjectMapper objectMapper = new ObjectMapper();
+			return ResponseEntity.ok().body("{\"sidoList\":" + objectMapper.writeValueAsString(list) + "}");
+		} catch (Exception e) {
+			return exceptionHandling(e);
+		}
+	}
+	
+	@GetMapping("/map/gugun/{sidoCode}")
+	public ResponseEntity<?> getGugun(@PathVariable String sidoCode) {
+		try {
+			List<GugunDto> list = planBoardService.getGugunList(sidoCode);
+			ObjectMapper objectMapper = new ObjectMapper();
+			return ResponseEntity.ok().body("{\"gugunList\":" + objectMapper.writeValueAsString(list) + "}");
+		} catch (Exception e) {
+			return exceptionHandling(e);
+		}
+	}
+	
+	@GetMapping("/map/attractioninfo")
+	private ResponseEntity<?> attractionInfo(@RequestParam Map<String, String> map) {
+		try {
+			List<AttractionInfoDto> list = planBoardService.getAttractionInfoList(map);
+			ObjectMapper objectMapper = new ObjectMapper();
+			return ResponseEntity.ok().body("{\"attractionInfoList\":" + objectMapper.writeValueAsString(list) + "}");
+		} catch (Exception e) {
+			return exceptionHandling(e);
+		}
+		
+	}
+	private ResponseEntity<?> exceptionHandling(Exception e) {
 		e.printStackTrace();
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error : " + e.getMessage());
 	}

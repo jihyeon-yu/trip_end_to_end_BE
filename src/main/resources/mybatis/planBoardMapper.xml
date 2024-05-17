@@ -120,4 +120,36 @@
 		plan_like
 		where plan_like_id = #{planLikeId}
 	</delete>
+	
+	<!--  Map -->
+	<select id="getSidoList" resultType="com.trip.plan_board.model.dto.SidoDto">
+		select sido_code sidoCode, sido_name sidoName
+		from sido
+	</select>
+	
+	<select id="getGugunList" parameterType="String" resultType="com.trip.plan_board.model.dto.GugunDto">
+		select gugun_code gugunCode, gugun_name gugunName, sido_code sidoCode
+		from gugun
+		where sido_code = #{sidoCode}
+	</select>
+	
+	<select id="getAttractionInfoList" parameterType="map" resultType="com.trip.plan_board.model.dto.AttractionInfoDto">
+		select *
+		from attraction_info
+		<where>
+			<if test="areaCode != null and areaCode != 0">
+				and sido_code = #{areaCode}
+			</if>
+			<if test="gugunCode != null and gugunCode != 0">
+				and gugun_code = #{gugunCode}
+			</if>
+			<if test="contentTypeId != null and contentTypeId != 0">
+				and content_type_id = #{contentTypeId}
+			</if>
+			<if test="keyword != null">
+				and title like concat('%', #{keyword}, '%')
+			</if>
+		</where>
+		limit 30
+	</select>
 </mapper>

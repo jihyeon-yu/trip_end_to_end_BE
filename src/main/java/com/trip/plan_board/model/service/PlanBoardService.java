@@ -1,7 +1,11 @@
 package com.trip.plan_board.model.service;
 
 import java.util.List;
+import java.util.Map;
 
+import com.trip.plan_board.model.dto.AttractionInfoDto;
+import com.trip.plan_board.model.dto.GugunDto;
+import com.trip.plan_board.model.dto.SidoDto;
 import com.trip.plan_board.model.dto.PlanBoardDto;
 import com.trip.plan_board.model.dto.PlanBoardTagDto;
 import com.trip.plan_board.model.dto.PlanCommentDto;
@@ -38,5 +42,12 @@ public interface PlanBoardService {
 	void insertLike(PlanLikeDto planLikeDto);
 
 	void deleteLike(String planLikeId);
+	
+	/* map */
+	List<SidoDto> getSidoList();
+
+	List<GugunDto> getGugunList(String sidoCode);
+	
+	List<AttractionInfoDto> getAttractionInfoList(Map<String, String> map);
 
 }

@@ -1,9 +1,13 @@
 package com.trip.plan_board.model.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
+import com.trip.plan_board.model.dto.AttractionInfoDto;
+import com.trip.plan_board.model.dto.GugunDto;
+import com.trip.plan_board.model.dto.SidoDto;
 import com.trip.plan_board.model.dto.PlanBoardDto;
 import com.trip.plan_board.model.dto.PlanBoardTagDto;
 import com.trip.plan_board.model.dto.PlanCommentDto;
@@ -97,5 +101,19 @@ public class PlanBoardServiceImpl implements PlanBoardService {
 	public void deleteLike(String likeId) {
 		planBoardMapper.deleteLike(likeId);
 	}
+	
+	@Override
+	public List<SidoDto> getSidoList(){
+		return planBoardMapper.getSidoList();
+	}
+	
+	@Override
+	public List<GugunDto> getGugunList(String sidoCode) {
+		return planBoardMapper.getGugunList(sidoCode);
+	}
 
+	@Override
+	public List<AttractionInfoDto> getAttractionInfoList(Map<String, String> map){
+		return planBoardMapper.getAttractionInfoList(map);
+	}
 }
