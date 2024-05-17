@@ -86,4 +86,9 @@ public class MemberServiceImpl implements MemberService {
         memberMapper.deleteMember(id);
         return true;
     }
+
+	@Override
+	public MemberDto findById(String memberId) {
+		return memberMapper.findById(memberId);
+	}
 }
