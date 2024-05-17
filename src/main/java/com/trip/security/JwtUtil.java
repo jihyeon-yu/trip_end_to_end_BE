@@ -2,6 +2,7 @@ package com.trip.security;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -40,9 +41,11 @@ public class JwtUtil {
     }
 
     private String generateToken(String username, long expiration) {
+    	Map<String, Object> claims = Map.of("memberId", username);
         return Jwts.builder()
+        		.setClaims(claims)
                 .setSubject(username)
-                .setIssuedAt(new Date())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(key)
                 .compact();
@@ -51,6 +54,11 @@ public class JwtUtil {
     public boolean validateToken(String token, String username) {
         return username.equals(getUsernameFromToken(token)) && !isTokenExpired(token);
     }
+    
+    public String getMemberIdFromToken(String token) {
+        Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+        return (String) claims.get("memberId");
+    } 
 
     public String getUsernameFromToken(String token) {
         Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
