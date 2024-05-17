@@ -13,6 +13,8 @@ public interface MemberMapper {
 	MemberDto findById(String id);
 	List<MemberDto> listMember();
 	void updateMember(MemberDto memberDto);
+	void changePassword(MemberDto memberDto);
 	void updateToken(@Param("id") String id, @Param("token") String token);
 	void deleteMember(@Param("id") String id);
+	
 }
