@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
 @RequestMapping(value = "/api/shareplan", produces = "application/json; charset=utf8")
-@CrossOrigin("*")
 public class PlanBoardController {
 	private PlanBoardService planBoardService;
 
