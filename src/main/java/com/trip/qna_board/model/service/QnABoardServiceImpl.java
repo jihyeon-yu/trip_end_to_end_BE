@@ -27,7 +27,7 @@ public class QnABoardServiceImpl implements QnABoardService {
 	public QnABoardDetailDto detailArticleById(String qnaBoardId) {
 		QnABoardDetailDto qnaBoardDetailDto = new QnABoardDetailDto();
 		qnaBoardDetailDto.setQnaBoardDto(qnaBoardMapper.detailArticleById(qnaBoardId));
-		qnaBoardDetailDto.setQnaCommentDto(qnaBoardMapper.listComment(qnaBoardId));
+		qnaBoardDetailDto.setCommentList(qnaBoardMapper.listComment(qnaBoardId));
 		return qnaBoardDetailDto;
 	}
 

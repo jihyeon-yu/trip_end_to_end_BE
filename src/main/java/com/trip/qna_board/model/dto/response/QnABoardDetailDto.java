@@ -1,5 +1,7 @@
 package com.trip.qna_board.model.dto.response;
 
+import java.util.List;
+
 import com.trip.qna_board.model.dto.QnABoardDto;
 import com.trip.qna_board.model.dto.QnACommentDto;
 
@@ -16,5 +18,5 @@ import lombok.ToString;
 @ToString
 public class QnABoardDetailDto {
 	private QnABoardDto qnaBoardDto;
-	private QnACommentDto qnaCommentDto;
+	private List<QnACommentDto> commentList;
 }

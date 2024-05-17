@@ -25,7 +25,7 @@ public interface QnABoardMapper {
 	
 	void updateStateToUnAnswered(String qnaBoardId);
 	/* comment */
-	QnACommentDto listComment(String qnaBoardId);
+	List<QnACommentDto> listComment(String qnaBoardId);
 
 	void insertComment(QnACommentDto qnaCommentDto);
 

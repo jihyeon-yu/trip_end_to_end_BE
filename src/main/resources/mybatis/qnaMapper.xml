@@ -24,13 +24,13 @@
 	<insert id="insertArticle" parameterType="qnaBoardDto">
 		insert into qna_board
 		(member_id, subject, content
-		<if test="secret != 0">
+		<if test="secret != 0 or secret != null">
 			, secret, password
 		</if>
 		)
 		values
 		(#{memberId}, #{subject}, #{content}
-		<if test="secret != 1">
+		<if test="secret != 0 or secret != null">
 			, #{secret}, #{password}
 		</if>
 		)
@@ -48,16 +48,19 @@
 		where qna_board_id =
 		#{qnaBoardId}
 	</update>
+	
 	<update id="updateStateToAnswered" parameterType="String">
 		update
 		qna_board
 		set isAnswered = 1
 	</update>
-	<update id="updateStateToAnswered" parameterType="String">
+	
+	<update id="updateStateToUnAnswered" parameterType="String">
 		update
 		qna_board
 		set isAnswered = 0
 	</update>
+	
 	<select id="listComment" parameterType="String"
 		resultType="qnaCommentDto">
 		select * from qna_comment
@@ -67,7 +70,7 @@
 
 	<insert id="insertComment" parameterType="qnaCommentDto">
 		insert into qna_comment
-		(qna_board_id, member_id, content, depth, commentGroup)
+		(qna_board_id, member_id, content, depth, comment_group)
 		values
 		(#{qnaBoardId}, #{memberId}, #{content}, #{depth}, #{commentGroup})
 	</insert>
@@ -76,10 +79,11 @@
 		delete from qna_comment
 		where comment_id = #{commentId}
 	</delete>
-	
+
 	<update id="modifyComment" parameterType="qnaCommentDto">
 		update qna_comment
-		set content = #{content}
+		set
+		content = #{content}
 		where comment_id = #{commentId}
 	</update>
 </mapper>

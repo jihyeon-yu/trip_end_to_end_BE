@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -52,9 +53,10 @@ public class QnABoardRestController {
 	}
 
 	@PostMapping("/write")
-	public ResponseEntity<?> insertArticle(QnABoardDto qnaBoardDto) {
+	public ResponseEntity<?> insertArticle(@RequestBody QnABoardDto qnaBoardDto) {
 		try {
 			qnaBoardService.insertArticle(qnaBoardDto);
+			System.out.println(qnaBoardDto);
 			return ResponseEntity.ok().body("{\"msg\" : 게시글 등록이 완료되었습니다. }");
 		} catch (Exception e) {
 			return exceptionHandling(e);
@@ -62,7 +64,7 @@ public class QnABoardRestController {
 	}
 
 	@PutMapping("/{qnaBoardId}")
-	public ResponseEntity<?> modifyArticle(@PathVariable String qnaBoardId, QnABoardDto qnaBoardDto) {
+	public ResponseEntity<?> modifyArticle(@PathVariable String qnaBoardId, @RequestBody QnABoardDto qnaBoardDto) {
 		try {
 			qnaBoardService.modifyArticle(qnaBoardDto);
 			return ResponseEntity.ok().body("{\"msg\" : 게시글 수정이 완료되었습니다. }");
@@ -83,7 +85,7 @@ public class QnABoardRestController {
 
 	/* comment - 댓글 */
 	@PostMapping("/insert/{qnaBoardId}/comment")
-	public ResponseEntity<?> insertComment(QnACommentDto qnaCommentDto) {
+	public ResponseEntity<?> insertComment(@RequestBody QnACommentDto qnaCommentDto) {
 		try {
 			qnaBoardService.insertComment(qnaCommentDto);
 			return ResponseEntity.ok().body("{\"msg\":" + "댓글 등록이 완료되었습니다. }");
@@ -103,7 +105,7 @@ public class QnABoardRestController {
 	}
 
 	@PutMapping("/comment/{commentId}")
-	public ResponseEntity<?> modifyComment(QnACommentDto qnaCommentDto) {
+	public ResponseEntity<?> modifyComment(@RequestBody QnACommentDto qnaCommentDto) {
 		try {
 			qnaBoardService.modifyComment(qnaCommentDto);
 			return ResponseEntity.ok().body("{\"msg\":" + "댓글 수정이 완료되었습니다. }");
