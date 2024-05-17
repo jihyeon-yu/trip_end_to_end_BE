@@ -14,13 +14,10 @@ import lombok.ToString;
 @Setter
 @ToString
 public class PlanRequestDto {
-	private String planId;
-	private String title;
-	private String startDate;
-	private String endDate;
-	private String[] memberIds;
-	private String[] bookContents;
-	private String[] scheduleDates;
+	private PlanDto planDto;
+	private List<PlanGroupDto> memberIds;
+	private List<BookGroupDto> bookContents;
+	private List<PlanScheduleDto> scheduleDates;
 	private List<PaymentDetailDto> paymentDetails;
-	private List<PlanLocationDto> planLocations;
+	private List<List<PlanLocationDto>> planLocations;
 }

@@ -1,5 +1,7 @@
 package com.trip.plan.model.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import com.trip.plan.model.dto.BookGroupDto;
@@ -7,17 +9,38 @@ import com.trip.plan.model.dto.PaymentDetailDto;
 import com.trip.plan.model.dto.PlanDto;
 import com.trip.plan.model.dto.PlanGroupDto;
 import com.trip.plan.model.dto.PlanLocationDto;
+import com.trip.plan.model.dto.PlanRequestDto;
 import com.trip.plan.model.dto.PlanScheduleDto;
 
 @Mapper
 public interface PlanMapper {
 	void insertPlan(PlanDto planDto);
 	
-	PlanDto searchPlanById(String planId);
+	List<PlanDto> searchPlanList(String memberId);
 	
+	PlanDto searchPlanByPlanId(String planId);
+	
+	List<PlanGroupDto> searchPlanGroup(String planId);
+	
+	List<BookGroupDto> searchBookGroup(String planId);
+	
+	List<PaymentDetailDto> searchPaymentDetail(String planId);
+	
+	List<PlanScheduleDto> searchPlanSchedule(String planId);
+	
+	List<PlanLocationDto> searchPlanLocation(String planScheduleId);
+
 	String searchLastPlanId();
 	
 	void updatePlan(PlanDto planDto);
+	
+	void updatePlanMember(PlanGroupDto planGroupDto);
+	
+	void updateBookDetail(BookGroupDto bookGroupDto);
+	
+	void updatePlanSchule(PlanScheduleDto planScheduleDto);
+	
+	void updatePaymentDetail(PaymentDetailDto paymentDetailDto);
 	
 	void deletePlan(String planId);
 	
