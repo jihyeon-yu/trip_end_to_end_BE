@@ -41,13 +41,13 @@
 	<insert id="insertArticle" parameterType="planBoardDto">
 		insert into plan_board (member_id, subject, content, start_date,
 		end_date, the_number_of_members
-		<if test="thumbnail != null">
+		<if test="thumbnail != null and thumbnail != '' ">
 			, thumbnail
 		</if>
 		)
 		values (#{memberId}, #{subject}, #{content}, #{startDate},
 		#{endDate}, #{theNumberOfMembers}
-		<if test="thumbnail != null">
+		<if test="thumbnail != null and thumbnail != ''">
 			, #{thumbnail}
 		</if>
 		)

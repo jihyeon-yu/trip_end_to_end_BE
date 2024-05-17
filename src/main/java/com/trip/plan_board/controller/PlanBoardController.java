@@ -2,10 +2,8 @@ package com.trip.plan_board.controller;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Delete;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping(value = "/api/shareplan", produces = "application/json; charset=utf8")
@@ -59,8 +58,9 @@ public class PlanBoardController {
 	}
 
 	@PostMapping("/insert")
-	public ResponseEntity<?> writeArticle(PlanBoardFormDto planBoard) {
+	public ResponseEntity<?> writeArticle(@RequestBody PlanBoardFormDto planBoard) {
 		try {
+			System.out.println(planBoard);
 			planBoardService.insertArticle(planBoard);
 			return ResponseEntity.ok().body("{\"msg\":" + "게시글 등록이 완료되었습니다. }");
 		} catch (Exception e) {
@@ -79,7 +79,7 @@ public class PlanBoardController {
 	}
 
 	@PutMapping("/{planBoardId}")
-	public ResponseEntity<?> modifyArticle(@PathVariable String planBoardId, PlanBoardFormDto planBoard) {
+	public ResponseEntity<?> modifyArticle(@PathVariable String planBoardId, @RequestBody PlanBoardFormDto planBoard) {
 		try {
 			if (!planBoardId.equals(planBoard.getPlanBoard().getPlanBoardId())) {
 				return ResponseEntity.badRequest().body("{\"msg\":" + "잘못된 요청입니다. }");
@@ -93,7 +93,7 @@ public class PlanBoardController {
 
 	/* comment - 댓글 */
 	@PostMapping("/insert/{planBoardId}/comment")
-	public ResponseEntity<?> insertComment(PlanCommentDto planCommentDto) {
+	public ResponseEntity<?> insertComment(@RequestBody PlanCommentDto planCommentDto) {
 		try {
 			planBoardService.insertComment(planCommentDto);
 			return ResponseEntity.ok().body("{\"msg\":" + "댓글 등록이 완료되었습니다. }");
@@ -113,7 +113,7 @@ public class PlanBoardController {
 	}
 
 	@PutMapping("/comment/{commentId}")
-	public ResponseEntity<?> modifyComment(PlanCommentDto planCommentDto) {
+	public ResponseEntity<?> modifyComment(@RequestBody PlanCommentDto planCommentDto) {
 		try {
 			planBoardService.modifyComment(planCommentDto);
 			return ResponseEntity.ok().body("{\"msg\":" + "댓글 수정이 완료되었습니다. }");
@@ -124,7 +124,7 @@ public class PlanBoardController {
 
 	/* tag - 태그 */
 	@PostMapping("/insert/{planBoardId}/tag")
-	public ResponseEntity<?> insertTag(PlanBoardTagDto planBoardTagDto) {
+	public ResponseEntity<?> insertTag(@RequestBody PlanBoardTagDto planBoardTagDto) {
 		try {
 			planBoardService.insertTag(planBoardTagDto);
 			return ResponseEntity.ok().body("{\"msg\":" + "태그 등록이 완료되었습니다. }");
@@ -145,7 +145,7 @@ public class PlanBoardController {
 
 	/* like - 좋아요 */
 	@PostMapping("/insert/{planBoardId}/like")
-	public ResponseEntity<?> insertLike(PlanLikeDto planLikeDto) {
+	public ResponseEntity<?> insertLike(@RequestBody PlanLikeDto planLikeDto) {
 		try {
 			planBoardService.insertLike(planLikeDto);
 			return ResponseEntity.ok().body("{\"msg\":" + "좋아요 등록이 완료되었습니다. }");
