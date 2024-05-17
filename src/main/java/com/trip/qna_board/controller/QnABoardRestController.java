@@ -42,7 +42,6 @@ public class QnABoardRestController {
 				map.put("word", "");
 			}
 			List<QnABoardListItemDto> list = qnaBoardService.listArticle(map);
-			System.out.println(list);
 			PageNavigation pageNavigation = qnaBoardService.makePageNavigation(map);
 			ObjectMapper objectMapper = new ObjectMapper();
 			String settingJson = objectMapper.writeValueAsString(map);
