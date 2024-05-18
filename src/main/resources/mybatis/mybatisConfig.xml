@@ -20,7 +20,7 @@
   	<typeAlias type="com.trip.plan_board.model.dto.TagGroupDto" alias="tagGroupDto"/>
   	<typeAlias type="com.trip.plan_board.model.dto.TagTypeDto" alias="tagTypeDto"/>
   	<typeAlias type="com.trip.plan_board.model.dto.PlanLikeDto" alias="planLikeDto"/>
-  	
+
   	<typeAlias type="com.trip.plan.model.dto.BookGroupDto" alias="bookGroupDto"/>
   	<typeAlias type="com.trip.plan.model.dto.PaymentDetailDto" alias="paymentDetailDto"/>
   	<typeAlias type="com.trip.plan.model.dto.PlanDto" alias="planDto"/>
@@ -33,6 +33,7 @@
   	
   	<typeAlias type="com.trip.qna_board.model.dto.QnABoardDto" alias="qnaBoardDto"/>
   	<typeAlias type="com.trip.qna_board.model.dto.QnACommentDto" alias="qnaCommentDto"/>
+  	<typeAlias type="com.trip.qna_board.model.dto.response.QnABoardListItemDto" alias="qnaBoardListItemDto"/>
   </typeAliases>
   <mappers>
     <mapper resource="mybatis/memberMapper.xml" />
