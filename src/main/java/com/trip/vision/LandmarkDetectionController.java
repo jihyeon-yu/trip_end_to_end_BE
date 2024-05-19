@@ -17,39 +17,56 @@ import com.google.cloud.vision.v1.EntityAnnotation;
 import com.google.cloud.vision.v1.Feature;
 import com.google.cloud.vision.v1.Image;
 import com.google.cloud.vision.v1.ImageAnnotatorClient;
+import com.google.cloud.vision.v1.ImageContext;
+import com.google.cloud.vision.v1.ImageContext.Builder;
 import com.google.protobuf.ByteString;
 
 @RestController
 @RequestMapping(value = "/api", produces = "application/json; charset=utf8")
 public class LandmarkDetectionController {
 
-	@PostMapping("/detectLandmark")
-	public List<String> detectLandmark(@RequestParam("file") MultipartFile file) throws IOException {
-		List<AnnotateImageRequest> requests = new ArrayList<>();
+    @PostMapping("/detectLandmark")
+    public List<Landmark> detectLandmark(@RequestParam("file") MultipartFile file) throws IOException {
+        List<AnnotateImageRequest> requests = new ArrayList<>();
 
-		ByteString imgBytes = ByteString.readFrom(file.getInputStream());
+        ByteString imgBytes = ByteString.readFrom(file.getInputStream());
 
-		Image img = Image.newBuilder().setContent(imgBytes).build();
-		Feature feat = Feature.newBuilder().setType(Feature.Type.LANDMARK_DETECTION).build();
-		AnnotateImageRequest request = AnnotateImageRequest.newBuilder().addFeatures(feat).setImage(img).build();
-		requests.add(request);
+        Image img = Image.newBuilder().setContent(imgBytes).build();
+        Feature feat = Feature.newBuilder().setType(Feature.Type.LANDMARK_DETECTION).build();
 
-		List<String> landmarks = new ArrayList<>();
-		try (ImageAnnotatorClient client = ImageAnnotatorClient.create()) {
-			BatchAnnotateImagesResponse response = client.batchAnnotateImages(requests);
-			List<AnnotateImageResponse> responses = response.getResponsesList();
+        // Set language hints to Korean
+        ImageContext context = ImageContext.newBuilder().addLanguageHints("ko").build();
 
-			for (AnnotateImageResponse res : responses) {
-				if (res.hasError()) {
-					System.out.printf("Error: %s\n", res.getError().getMessage());
-					return null;
-				}
+        AnnotateImageRequest request = AnnotateImageRequest.newBuilder()
+                .addFeatures(feat)
+                .setImage(img)
+                .setImageContext(context)
+                .build();
+        requests.add(request);
 
-				for (EntityAnnotation annotation : res.getLandmarkAnnotationsList()) {
-					landmarks.add(annotation.getDescription());
-				}
-			}
-		}
-		return landmarks;
-	}
+        List<Landmark> landmarks = new ArrayList<>();
+        try (ImageAnnotatorClient client = ImageAnnotatorClient.create()) {
+            BatchAnnotateImagesResponse response = client.batchAnnotateImages(requests);
+            List<AnnotateImageResponse> responses = response.getResponsesList();
+            System.out.println(responses);
+
+            for (AnnotateImageResponse res : responses) {
+                if (res.hasError()) {
+                    System.out.printf("Error: %s\n", res.getError().getMessage());
+                    return null;
+                }
+
+                for (EntityAnnotation annotation : res.getLandmarkAnnotationsList()) {
+                    Landmark landmark = new Landmark();
+                    landmark.setDescription(annotation.getDescription());
+                    if (annotation.getLocationsCount() > 0) {
+                        landmark.setLatitude(annotation.getLocations(0).getLatLng().getLatitude());
+                        landmark.setLongitude(annotation.getLocations(0).getLatLng().getLongitude());
+                    }
+                    landmarks.add(landmark);
+                }
+            }
+        }
+        return landmarks;
+    }
 }
