@@ -9,7 +9,6 @@ import com.trip.plan_board.model.dto.AttractionDescriptionDto;
 import com.trip.plan_board.model.dto.AttractionInfoDto;
 import com.trip.plan_board.model.dto.GugunDto;
 import com.trip.plan_board.model.dto.SidoDto;
-import com.trip.plan_board.model.dto.TagTypeDto;
 import com.trip.plan_board.model.dto.PlanBoardDto;
 import com.trip.plan_board.model.dto.PlanBoardTagDto;
 import com.trip.plan_board.model.dto.PlanCommentDto;
@@ -21,12 +20,12 @@ import com.trip.plan_board.model.mapper.PlanBoardMapper;
 @Service
 public class PlanBoardServiceImpl implements PlanBoardService {
 	private PlanBoardMapper planBoardMapper;
-
+	
 	public PlanBoardServiceImpl(PlanBoardMapper planBoardMapper) {
 		super();
 		this.planBoardMapper = planBoardMapper;
 	}
-
+	
 	@Override
 	public List<PlanBoardDto> listArticle() {
 		return planBoardMapper.listArticle();
@@ -63,7 +62,7 @@ public class PlanBoardServiceImpl implements PlanBoardService {
 			planBoardMapper.insertTag(tag);
 		}
 	}
-
+	
 	@Override
 	public void updateHit(String planBoardId) {
 		planBoardMapper.updateHit(planBoardId);
@@ -95,11 +94,6 @@ public class PlanBoardServiceImpl implements PlanBoardService {
 	}
 
 	@Override
-	public List<TagTypeDto> searchTag(String tagName) {
-		return planBoardMapper.searchTag(tagName);
-	}
-
-	@Override
 	public void insertLike(PlanLikeDto planLikeDto) {
 		planBoardMapper.insertLike(planLikeDto);
 	}
@@ -108,22 +102,22 @@ public class PlanBoardServiceImpl implements PlanBoardService {
 	public void deleteLike(String likeId) {
 		planBoardMapper.deleteLike(likeId);
 	}
-
+	
 	@Override
-	public List<SidoDto> getSidoList() {
+	public List<SidoDto> getSidoList(){
 		return planBoardMapper.getSidoList();
 	}
-
+	
 	@Override
 	public List<GugunDto> getGugunList(String sidoCode) {
 		return planBoardMapper.getGugunList(sidoCode);
 	}
 
 	@Override
-	public List<AttractionInfoDto> getAttractionInfoList(Map<String, String> map) {
+	public List<AttractionInfoDto> getAttractionInfoList(Map<String, String> map){
 		return planBoardMapper.getAttractionInfoList(map);
 	}
-
+	
 	@Override
 	public AttractionDescriptionDto getAttractionDescription(String contentId) {
 		return planBoardMapper.getAttractionDescription(contentId);
