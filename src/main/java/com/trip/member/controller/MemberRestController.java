@@ -41,6 +41,7 @@ public class MemberRestController {
 
 	@PostMapping("/login")
 	public ResponseEntity<TokenDto> login(@RequestBody MemberLoginRequestDto memberLoginRequestDto) {
+		System.out.println(memberLoginRequestDto);
 		TokenDto tokenDto = memberService.login(memberLoginRequestDto);
 		if (tokenDto != null) {
 			return ResponseEntity.ok(tokenDto);
