@@ -57,7 +57,7 @@ public class PlanBoardController {
 			planBoardService.updateHit(planBoardId);
 			ObjectMapper objectMapper = new ObjectMapper();
 			return ResponseEntity.ok()
-					.body("{\"article\":" + objectMapper.writeValueAsString(planBoardDetailDto) + "}");
+					.body(objectMapper.writeValueAsString(planBoardDetailDto));
 		} catch (Exception e) {
 			return exceptionHandling(e);
 		}

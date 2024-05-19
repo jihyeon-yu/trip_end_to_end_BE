@@ -29,6 +29,7 @@
 		select * from plan_comment
 		where plan_board_id =
 		#{plan_board_id}
+		order by comment_id desc
 	</select>
 
 	<select id="listLikeById" parameterType="String"
@@ -92,7 +93,7 @@
 	<insert id="insertComment" parameterType="planCommentDto">
 		insert into
 		plan_comment
-		(plan_board_id, member_id, content, depth, commentGroup)
+		(plan_board_id, member_id, content, depth, comment_group)
 		values(#{planBoardId}, #{memberId}, #{content}, #{depth},
 		#{commentGroup})
 	</insert>
