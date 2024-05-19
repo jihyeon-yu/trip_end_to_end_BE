@@ -1,6 +1,7 @@
 package com.trip.notice_board.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,11 +12,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.trip.notice_board.model.dto.NoticeBoardDto;
 import com.trip.notice_board.model.service.NoticeBoardService;
+import com.trip.util.PageNavigation;
 
 @RestController
 @RequestMapping(value = "/api/notice", produces = "application/json; charset=utf8")
@@ -28,11 +31,22 @@ public class NoticeBoardRestController {
 	}
 
 	@GetMapping("/list")
-	public ResponseEntity<?> listArticle() {
+	public ResponseEntity<?> listArticle(@RequestParam Map<String, String> map) {
 		try {
-			List<NoticeBoardDto> list = noticeBoardService.listArticle();
+			if (!map.containsKey("pgno") && !map.containsKey("key") && !map.containsKey("word")) {
+				map.put("pgno", "1");
+				map.put("key", "");
+				map.put("word", "");
+			}
+			List<NoticeBoardDto> list = noticeBoardService.listArticle(map);
+			PageNavigation pageNavigation = noticeBoardService.makePageNavigation(map);
 			ObjectMapper objectMapper = new ObjectMapper();
-			return ResponseEntity.ok().body("{\"articles\":" + objectMapper.writeValueAsString(list) + "}");
+			String settingJson = objectMapper.writeValueAsString(map);
+			String articlesJson = objectMapper.writeValueAsString(list);
+			String navigationJson = objectMapper.writeValueAsString(pageNavigation);
+
+			return ResponseEntity.ok().body("{\"setting\": " + settingJson + ", \"articles\": " + articlesJson
+					+ ", \"pageNavigation\": " + navigationJson + "}");
 		} catch (Exception e) {
 			return exceptionHandling(e);
 		}
@@ -44,13 +58,13 @@ public class NoticeBoardRestController {
 			NoticeBoardDto noticeBoardDto = noticeBoardService.detailArticleById(noticeId);
 			noticeBoardService.updateHit(noticeId);
 			ObjectMapper objectMapper = new ObjectMapper();
-			return ResponseEntity.ok().body("{\"article\":" + objectMapper.writeValueAsString(noticeBoardDto) + "}");
+			return ResponseEntity.ok().body(objectMapper.writeValueAsString(noticeBoardDto));
 		} catch (Exception e) {
 			return exceptionHandling(e);
 		}
 	}
 
-	@PostMapping("/write")
+	@PostMapping("/insert")
 	public ResponseEntity<?> insertArticle(@RequestBody NoticeBoardDto noticeBoard) {
 		try {
 			noticeBoardService.insertArticle(noticeBoard);

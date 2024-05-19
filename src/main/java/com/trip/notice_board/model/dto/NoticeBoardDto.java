@@ -14,6 +14,7 @@ import lombok.ToString;
 public class NoticeBoardDto {
 	private String noticeBoardId;
 	private String memberId;
+	private String nickname;
 	private String hit;
 	private String subject;
 	private String content;
