@@ -118,22 +118,27 @@
 	<delete id="deleteLike" parameterType="String">
 		delete from
 		plan_like
-		where plan_like_id = #{planLikeId}
+		where
+		plan_like_id = #{planLikeId}
 	</delete>
-	
-	<!--  Map -->
-	<select id="getSidoList" resultType="com.trip.plan_board.model.dto.SidoDto">
+
+	<!-- Map -->
+	<select id="getSidoList"
+		resultType="com.trip.plan_board.model.dto.SidoDto">
 		select sido_code sidoCode, sido_name sidoName
 		from sido
 	</select>
-	
-	<select id="getGugunList" parameterType="String" resultType="com.trip.plan_board.model.dto.GugunDto">
-		select gugun_code gugunCode, gugun_name gugunName, sido_code sidoCode
+
+	<select id="getGugunList" parameterType="String"
+		resultType="com.trip.plan_board.model.dto.GugunDto">
+		select gugun_code gugunCode, gugun_name gugunName,
+		sido_code sidoCode
 		from gugun
 		where sido_code = #{sidoCode}
 	</select>
-	
-	<select id="getAttractionInfoList" parameterType="map" resultType="com.trip.plan_board.model.dto.AttractionInfoDto">
+
+	<select id="getAttractionInfoList" parameterType="map"
+		resultType="com.trip.plan_board.model.dto.AttractionInfoDto">
 		select *
 		from attraction_info
 		<where>
@@ -152,4 +157,12 @@
 		</where>
 		limit 30
 	</select>
+
+	<select id="getAttractionDescription" parameterType="String"
+		resultType="com.trip.plan_board.model.dto.AttractionDescriptionDto">
+		select *
+		from attraction_description
+		where content_id = #{contentId}
+	</select>
+
 </mapper>

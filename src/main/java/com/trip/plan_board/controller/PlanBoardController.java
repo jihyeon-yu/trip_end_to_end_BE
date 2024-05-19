@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.trip.plan_board.model.dto.AttractionDescriptionDto;
 import com.trip.plan_board.model.dto.AttractionInfoDto;
 import com.trip.plan_board.model.dto.GugunDto;
 import com.trip.plan_board.model.dto.PlanBoardDto;
@@ -193,7 +194,7 @@ public class PlanBoardController {
 	}
 	
 	@GetMapping("/map/attractioninfo")
-	private ResponseEntity<?> attractionInfo(@RequestParam Map<String, String> map) {
+	public ResponseEntity<?> attractionInfo(@RequestParam Map<String, String> map) {
 		try {
 			List<AttractionInfoDto> list = planBoardService.getAttractionInfoList(map);
 			ObjectMapper objectMapper = new ObjectMapper();
@@ -203,6 +204,18 @@ public class PlanBoardController {
 		}
 		
 	}
+	
+	@GetMapping("/map/attractiondescription/{contentId}")
+	public ResponseEntity<?> attractionDescription(@PathVariable String contentId) {
+		try {
+			AttractionDescriptionDto description = planBoardService.getAttractionDescription(contentId);
+			ObjectMapper objectMapper = new ObjectMapper();
+			return ResponseEntity.ok().body(objectMapper.writeValueAsString(description));
+		} catch (Exception e) {
+			return exceptionHandling(e);
+		}
+	}
+	
 	private ResponseEntity<?> exceptionHandling(Exception e) {
 		e.printStackTrace();
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error : " + e.getMessage());

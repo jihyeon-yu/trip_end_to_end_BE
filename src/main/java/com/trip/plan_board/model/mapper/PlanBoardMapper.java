@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.trip.plan_board.model.dto.AttractionDescriptionDto;
 import com.trip.plan_board.model.dto.AttractionInfoDto;
 import com.trip.plan_board.model.dto.GugunDto;
 import com.trip.plan_board.model.dto.SidoDto;
@@ -56,4 +57,6 @@ public interface PlanBoardMapper {
 	List<GugunDto> getGugunList(String sidoCode);
 	
 	List<AttractionInfoDto> getAttractionInfoList(Map<String, String> map);
+	
+	AttractionDescriptionDto getAttractionDescription(String contentId);
 }

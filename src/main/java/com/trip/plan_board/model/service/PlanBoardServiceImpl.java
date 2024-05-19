@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
+import com.trip.plan_board.model.dto.AttractionDescriptionDto;
 import com.trip.plan_board.model.dto.AttractionInfoDto;
 import com.trip.plan_board.model.dto.GugunDto;
 import com.trip.plan_board.model.dto.SidoDto;
@@ -115,5 +116,10 @@ public class PlanBoardServiceImpl implements PlanBoardService {
 	@Override
 	public List<AttractionInfoDto> getAttractionInfoList(Map<String, String> map){
 		return planBoardMapper.getAttractionInfoList(map);
+	}
+	
+	@Override
+	public AttractionDescriptionDto getAttractionDescription(String contentId) {
+		return planBoardMapper.getAttractionDescription(contentId);
 	}
 }

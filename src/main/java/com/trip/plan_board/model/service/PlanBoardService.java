@@ -3,6 +3,7 @@ package com.trip.plan_board.model.service;
 import java.util.List;
 import java.util.Map;
 
+import com.trip.plan_board.model.dto.AttractionDescriptionDto;
 import com.trip.plan_board.model.dto.AttractionInfoDto;
 import com.trip.plan_board.model.dto.GugunDto;
 import com.trip.plan_board.model.dto.SidoDto;
@@ -49,5 +50,8 @@ public interface PlanBoardService {
 	List<GugunDto> getGugunList(String sidoCode);
 	
 	List<AttractionInfoDto> getAttractionInfoList(Map<String, String> map);
+	
+	AttractionDescriptionDto getAttractionDescription(String contentId);
+
 
 }
