@@ -17,6 +17,17 @@
 	<properties>
 		<java.version>17</java.version>
 	</properties>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.google.cloud</groupId>
+				<artifactId>libraries-bom</artifactId>
+				<version>26.39.0</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -109,7 +120,18 @@
 			<artifactId>jakarta.annotation-api</artifactId>
 			<version>2.0.0</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.json/json -->
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20231013</version>
+		</dependency>
+		<!--Google Cloud Vision API-->
 
+		<dependency>
+			<groupId>com.google.cloud</groupId>
+			<artifactId>google-cloud-vision</artifactId>
+		</dependency>
 		<!--		 swagger를 위한 의존성 추가. springdoc로 검색 : SpringDoc OpenAPI Starter
 		WebMVC UI
 		https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui 
