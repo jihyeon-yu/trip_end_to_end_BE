@@ -26,9 +26,18 @@
 
 	<select id="listCommentById" parameterType="String"
 		resultType="planCommentDto">
-		select * from plan_comment
-		where plan_board_id =
-		#{plan_board_id}
+		select pc.comment_id commentId, 
+		pc.plan_board_id planBoardId,
+		pc.member_id memberId, 
+		m.nickname nickname,
+		pc.content content, 
+		pc.depth depth, 
+		pc.comment_group commentGroup,
+		pc.deleted deleted, 
+		pc.register_time registerTime
+		from plan_comment pc
+		left join member m on pc.member_id = m.member_id
+		where plan_board_id = #{plan_board_id}
 		order by comment_id desc
 	</select>
 
@@ -88,7 +97,12 @@
 		plan_board_tag
 		where plan_board_tag_id = #{tagId}
 	</delete>
-
+	<select id="searchTag" parameterType="String"
+		resultType="tagTypeDto">
+		select * from tag_type
+		where name like concat('%',
+		#{tagName}, '%')
+	</select>
 	<!-- Comment -->
 	<insert id="insertComment" parameterType="planCommentDto">
 		insert into
@@ -163,7 +177,8 @@
 		resultType="com.trip.plan_board.model.dto.AttractionDescriptionDto">
 		select *
 		from attraction_description
-		where content_id = #{contentId}
+		where content_id =
+		#{contentId}
 	</select>
 
 </mapper>
