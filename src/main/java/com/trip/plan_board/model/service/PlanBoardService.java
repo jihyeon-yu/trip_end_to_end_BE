@@ -3,9 +3,11 @@ package com.trip.plan_board.model.service;
 import java.util.List;
 import java.util.Map;
 
+import com.trip.plan_board.model.dto.AttractionDescriptionDto;
 import com.trip.plan_board.model.dto.AttractionInfoDto;
 import com.trip.plan_board.model.dto.GugunDto;
 import com.trip.plan_board.model.dto.SidoDto;
+import com.trip.plan_board.model.dto.TagTypeDto;
 import com.trip.plan_board.model.dto.PlanBoardDto;
 import com.trip.plan_board.model.dto.PlanBoardTagDto;
 import com.trip.plan_board.model.dto.PlanCommentDto;
@@ -38,16 +40,20 @@ public interface PlanBoardService {
 
 	void deleteTag(String planBoardTagId);
 
+	List<TagTypeDto> searchTag(String tagName);
+
 	/* like */
 	void insertLike(PlanLikeDto planLikeDto);
 
 	void deleteLike(String planLikeId);
-	
+
 	/* map */
 	List<SidoDto> getSidoList();
 
 	List<GugunDto> getGugunList(String sidoCode);
-	
+
 	List<AttractionInfoDto> getAttractionInfoList(Map<String, String> map);
+
+	AttractionDescriptionDto getAttractionDescription(String contentId);
 
 }

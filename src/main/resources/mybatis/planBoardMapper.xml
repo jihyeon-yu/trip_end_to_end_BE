@@ -26,9 +26,19 @@
 
 	<select id="listCommentById" parameterType="String"
 		resultType="planCommentDto">
-		select * from plan_comment
-		where plan_board_id =
-		#{plan_board_id}
+		select pc.comment_id commentId, 
+		pc.plan_board_id planBoardId,
+		pc.member_id memberId, 
+		m.nickname nickname,
+		pc.content content, 
+		pc.depth depth, 
+		pc.comment_group commentGroup,
+		pc.deleted deleted, 
+		pc.register_time registerTime
+		from plan_comment pc
+		left join member m on pc.member_id = m.member_id
+		where plan_board_id = #{plan_board_id}
+		order by comment_id desc
 	</select>
 
 	<select id="listLikeById" parameterType="String"
@@ -87,12 +97,17 @@
 		plan_board_tag
 		where plan_board_tag_id = #{tagId}
 	</delete>
-
+	<select id="searchTag" parameterType="String"
+		resultType="tagTypeDto">
+		select * from tag_type
+		where name like concat('%',
+		#{tagName}, '%')
+	</select>
 	<!-- Comment -->
 	<insert id="insertComment" parameterType="planCommentDto">
 		insert into
 		plan_comment
-		(plan_board_id, member_id, content, depth, commentGroup)
+		(plan_board_id, member_id, content, depth, comment_group)
 		values(#{planBoardId}, #{memberId}, #{content}, #{depth},
 		#{commentGroup})
 	</insert>
@@ -118,22 +133,27 @@
 	<delete id="deleteLike" parameterType="String">
 		delete from
 		plan_like
-		where plan_like_id = #{planLikeId}
+		where
+		plan_like_id = #{planLikeId}
 	</delete>
-	
-	<!--  Map -->
-	<select id="getSidoList" resultType="com.trip.plan_board.model.dto.SidoDto">
+
+	<!-- Map -->
+	<select id="getSidoList"
+		resultType="com.trip.plan_board.model.dto.SidoDto">
 		select sido_code sidoCode, sido_name sidoName
 		from sido
 	</select>
-	
-	<select id="getGugunList" parameterType="String" resultType="com.trip.plan_board.model.dto.GugunDto">
-		select gugun_code gugunCode, gugun_name gugunName, sido_code sidoCode
+
+	<select id="getGugunList" parameterType="String"
+		resultType="com.trip.plan_board.model.dto.GugunDto">
+		select gugun_code gugunCode, gugun_name gugunName,
+		sido_code sidoCode
 		from gugun
 		where sido_code = #{sidoCode}
 	</select>
-	
-	<select id="getAttractionInfoList" parameterType="map" resultType="com.trip.plan_board.model.dto.AttractionInfoDto">
+
+	<select id="getAttractionInfoList" parameterType="map"
+		resultType="com.trip.plan_board.model.dto.AttractionInfoDto">
 		select *
 		from attraction_info
 		<where>
@@ -152,4 +172,13 @@
 		</where>
 		limit 30
 	</select>
+
+	<select id="getAttractionDescription" parameterType="String"
+		resultType="com.trip.plan_board.model.dto.AttractionDescriptionDto">
+		select *
+		from attraction_description
+		where content_id =
+		#{contentId}
+	</select>
+
 </mapper>

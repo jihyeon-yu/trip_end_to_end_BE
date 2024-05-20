@@ -5,9 +5,11 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.trip.plan_board.model.dto.AttractionDescriptionDto;
 import com.trip.plan_board.model.dto.AttractionInfoDto;
 import com.trip.plan_board.model.dto.GugunDto;
 import com.trip.plan_board.model.dto.SidoDto;
+import com.trip.plan_board.model.dto.TagTypeDto;
 import com.trip.plan_board.model.dto.PlanBoardDto;
 import com.trip.plan_board.model.dto.PlanBoardTagDto;
 import com.trip.plan_board.model.dto.PlanCommentDto;
@@ -45,6 +47,8 @@ public interface PlanBoardMapper {
 
 	void deleteTag(String planBoardTagId);
 
+	List<TagTypeDto> searchTag(String tagName);
+
 	/* like */
 	void insertLike(PlanLikeDto planLikeDto);
 
@@ -54,6 +58,8 @@ public interface PlanBoardMapper {
 	List<SidoDto> getSidoList();
 
 	List<GugunDto> getGugunList(String sidoCode);
-	
+
 	List<AttractionInfoDto> getAttractionInfoList(Map<String, String> map);
+
+	AttractionDescriptionDto getAttractionDescription(String contentId);
 }

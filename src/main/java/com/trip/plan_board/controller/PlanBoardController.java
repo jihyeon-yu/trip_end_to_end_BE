@@ -1,16 +1,25 @@
 package com.trip.plan_board.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.trip.plan_board.model.dto.AttractionDescriptionDto;
 import com.trip.plan_board.model.dto.AttractionInfoDto;
 import com.trip.plan_board.model.dto.GugunDto;
 import com.trip.plan_board.model.dto.PlanBoardDto;
@@ -18,6 +27,7 @@ import com.trip.plan_board.model.dto.PlanBoardTagDto;
 import com.trip.plan_board.model.dto.PlanCommentDto;
 import com.trip.plan_board.model.dto.PlanLikeDto;
 import com.trip.plan_board.model.dto.SidoDto;
+import com.trip.plan_board.model.dto.TagTypeDto;
 import com.trip.plan_board.model.dto.request.PlanBoardFormDto;
 import com.trip.plan_board.model.dto.response.PlanBoardDetailDto;
 import com.trip.plan_board.model.service.PlanBoardService;
@@ -56,7 +66,7 @@ public class PlanBoardController {
 			planBoardService.updateHit(planBoardId);
 			ObjectMapper objectMapper = new ObjectMapper();
 			return ResponseEntity.ok()
-					.body("{\"article\":" + objectMapper.writeValueAsString(planBoardDetailDto) + "}");
+					.body(objectMapper.writeValueAsString(planBoardDetailDto));
 		} catch (Exception e) {
 			return exceptionHandling(e);
 		}
@@ -72,7 +82,38 @@ public class PlanBoardController {
 			return exceptionHandling(e);
 		}
 	}
+	@Value("${upload.dir}") // application.properties에 저장된 파일 업로드 디렉토리 경로
+	private String uploadDir;
 
+	@PostMapping("/upload/thumbnail")
+	public ResponseEntity<String> handleFileUpload(@RequestParam("thumbnail") MultipartFile file) {
+		if (file.isEmpty()) {
+			return ResponseEntity.badRequest().body("업로드할 파일을 선택하세요.");
+		}
+
+		try {
+			// 파일 이름 중복 방지를 위해 UUID를 사용하여 고유한 파일명 생성
+			String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+
+			// 저장할 디렉토리 생성 (필요시)
+			File directory = new File(uploadDir);
+			if (!directory.exists()) {
+				directory.mkdirs(); // 디렉토리가 존재하지 않으면 생성
+			}
+
+			// 파일 저장 경로
+			String filePath = uploadDir + File.separator + fileName;
+
+			// 파일을 디스크에 저장
+			Path path = Paths.get(filePath);
+			Files.write(path, file.getBytes());
+
+			return ResponseEntity.ok().body(filePath);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("파일 업로드 중 오류 발생: " + e.getMessage());
+		}
+	}
 	@DeleteMapping("/{planBoardId}")
 	public ResponseEntity<?> deleteArticle(@PathVariable String planBoardId) {
 		try {
@@ -147,6 +188,17 @@ public class PlanBoardController {
 			return exceptionHandling(e);
 		}
 	}
+	
+	@GetMapping("/tag/{tagName}")
+	public ResponseEntity<?> searchTag(@PathVariable String tagName) {
+		try {
+			List<TagTypeDto> list = planBoardService.searchTag(tagName);
+			ObjectMapper objectMapper = new ObjectMapper();
+			return ResponseEntity.ok().body(objectMapper.writeValueAsString(list));
+		} catch (Exception e) {
+			return exceptionHandling(e);
+		}
+	}
 
 	/* like - 좋아요 */
 	@PostMapping("/insert/{planBoardId}/like")
@@ -193,7 +245,7 @@ public class PlanBoardController {
 	}
 	
 	@GetMapping("/map/attractioninfo")
-	private ResponseEntity<?> attractionInfo(@RequestParam Map<String, String> map) {
+	public ResponseEntity<?> attractionInfo(@RequestParam Map<String, String> map) {
 		try {
 			List<AttractionInfoDto> list = planBoardService.getAttractionInfoList(map);
 			ObjectMapper objectMapper = new ObjectMapper();
@@ -203,6 +255,18 @@ public class PlanBoardController {
 		}
 		
 	}
+	
+	@GetMapping("/map/attractiondescription/{contentId}")
+	public ResponseEntity<?> attractionDescription(@PathVariable String contentId) {
+		try {
+			AttractionDescriptionDto description = planBoardService.getAttractionDescription(contentId);
+			ObjectMapper objectMapper = new ObjectMapper();
+			return ResponseEntity.ok().body(objectMapper.writeValueAsString(description));
+		} catch (Exception e) {
+			return exceptionHandling(e);
+		}
+	}
+	
 	private ResponseEntity<?> exceptionHandling(Exception e) {
 		e.printStackTrace();
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error : " + e.getMessage());
