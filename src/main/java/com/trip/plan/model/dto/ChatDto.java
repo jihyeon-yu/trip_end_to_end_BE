@@ -12,6 +12,10 @@ import lombok.ToString;
 @Setter
 @ToString
 public class ChatDto {
+	public enum MessageType {
+		JOIN, SEND, LEAVE
+	}
 	private String nickname;
 	private String content;
+	private MessageType type;
 }
