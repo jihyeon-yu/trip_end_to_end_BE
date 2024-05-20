@@ -1,12 +1,18 @@
 package com.trip.plan_board.model.service;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.trip.plan_board.model.dto.AttractionDescriptionDto;
 import com.trip.plan_board.model.dto.AttractionInfoDto;
+import com.trip.plan_board.model.dto.FileInfoDto;
 import com.trip.plan_board.model.dto.GugunDto;
 import com.trip.plan_board.model.dto.SidoDto;
 import com.trip.plan_board.model.dto.TagTypeDto;
@@ -21,6 +27,8 @@ import com.trip.plan_board.model.mapper.PlanBoardMapper;
 @Service
 public class PlanBoardServiceImpl implements PlanBoardService {
 	private PlanBoardMapper planBoardMapper;
+	@Value("${upload.dir}") // application.properties에 저장된 파일 업로드 디렉토리 경로
+	private String uploadDir;
 
 	public PlanBoardServiceImpl(PlanBoardMapper planBoardMapper) {
 		super();
@@ -43,11 +51,47 @@ public class PlanBoardServiceImpl implements PlanBoardService {
 	}
 
 	@Override
-	public void insertArticle(PlanBoardFormDto planBoardFormDto) {
-		planBoardMapper.insertArticle(planBoardFormDto.getPlanBoard());
-		for (PlanBoardTagDto tag : planBoardFormDto.getTagList()) {
-			planBoardMapper.insertTag(tag);
+	public void insertArticle(PlanBoardFormDto planBoardFormDto, MultipartFile file) {
+		try {
+			System.out.println(planBoardFormDto + " | " + file);
+
+			// 게시글 정보 업데이트
+			PlanBoardDto planBoard = planBoardFormDto.getPlanBoard();
+			planBoardMapper.insertArticle(planBoard);
+			String planBoardId = planBoard.getPlanBoardId();
+			String fileName = generateImageUrl(file);
+
+			// 파일 업로드
+			FileInfoDto fileInfoDto = new FileInfoDto();
+			fileInfoDto.setPlanBoardId(planBoardId);
+			fileInfoDto.setSaveFolder(uploadDir); // 파일을 저장할 경로
+			fileInfoDto.setOriginalFile(file.getOriginalFilename()); // 원래 파일 이름
+			fileInfoDto.setSaveFile(fileName); // 저장된 파일 이름 (plan_board의 thumbnail 필드 값)
+			planBoardMapper.registerFile(fileInfoDto); // 파일 정보를 데이터베이스에 저장
+
+			// 태그 삽입
+			for (PlanBoardTagDto tag : planBoardFormDto.getTagList()) {
+				tag.setPlanBoardId(planBoardId);
+				planBoardMapper.insertTag(tag);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
+
+	}
+
+	private String generateImageUrl(MultipartFile file) throws IOException {
+		if (file.isEmpty())
+			throw new IllegalArgumentException("File is Empty");
+		String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+		File targetFile = new File(uploadDir, fileName);
+		file.transferTo(targetFile);
+		return fileName;
+	}
+
+	@Override
+	public FileInfoDto fileInfo(String planBoardId) {
+		return planBoardMapper.fileInfo(planBoardId);
 	}
 
 	@Override
@@ -57,9 +101,11 @@ public class PlanBoardServiceImpl implements PlanBoardService {
 
 	@Override
 	public void modifyArticle(PlanBoardFormDto planBoardFormDto) {
+		System.out.println(planBoardFormDto);
 		planBoardMapper.modifyArticle(planBoardFormDto.getPlanBoard());
 		planBoardMapper.deleteTag(planBoardFormDto.getPlanBoard().getPlanBoardId());
 		for (PlanBoardTagDto tag : planBoardFormDto.getTagList()) {
+			tag.setPlanBoardId(planBoardFormDto.getPlanBoard().getPlanBoardId());
 			planBoardMapper.insertTag(tag);
 		}
 	}
@@ -128,4 +174,20 @@ public class PlanBoardServiceImpl implements PlanBoardService {
 	public AttractionDescriptionDto getAttractionDescription(String contentId) {
 		return planBoardMapper.getAttractionDescription(contentId);
 	}
+
+	@Override
+	public List<PlanBoardTagDto> listTagById(String planBoardId) {
+		return planBoardMapper.listTagById(planBoardId);
+	}
+
+	@Override
+	public List<PlanCommentDto> listCommentById(String planBoardId) {
+		return planBoardMapper.listCommentById(planBoardId);
+	}
+
+	@Override
+	public List<PlanLikeDto> listLikeById(String planBoardId) {
+		return planBoardMapper.listLikeById(planBoardId);
+	}
+
 }

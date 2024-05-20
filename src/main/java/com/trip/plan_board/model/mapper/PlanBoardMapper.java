@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.trip.plan_board.model.dto.AttractionDescriptionDto;
 import com.trip.plan_board.model.dto.AttractionInfoDto;
+import com.trip.plan_board.model.dto.FileInfoDto;
 import com.trip.plan_board.model.dto.GugunDto;
 import com.trip.plan_board.model.dto.SidoDto;
 import com.trip.plan_board.model.dto.TagTypeDto;
@@ -29,11 +30,16 @@ public interface PlanBoardMapper {
 
 	List<PlanLikeDto> listLikeById(String planBoardId);
 
-	void insertArticle(PlanBoardDto planBoardDto);
+	int insertArticle(PlanBoardDto planBoardDto);
 
 	void deleteArticle(String planBoardId);
 
 	void modifyArticle(PlanBoardDto planBoardDto);
+
+	/* file */
+	void registerFile(FileInfoDto fileInfo);
+
+	FileInfoDto fileInfo(String planBoardId);
 
 	/* comment */
 	void insertComment(PlanCommentDto planCommentDto);
@@ -45,7 +51,7 @@ public interface PlanBoardMapper {
 	/* tag */
 	void insertTag(PlanBoardTagDto planBoardTagDto);
 
-	void deleteTag(String planBoardTagId);
+	void deleteTag(String planBoardId);
 
 	List<TagTypeDto> searchTag(String tagName);
 

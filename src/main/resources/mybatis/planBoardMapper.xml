@@ -19,26 +19,34 @@
 
 	<select id="listTagById" parameterType="String"
 		resultType="planBoardTagDto">
-		select * from plan_board_tag
+		select pbt.plan_board_tag_id planBoardTagId,
+		pbt.plan_board_id planBoardId,
+		pbt.tag_type_id tagTypeId,
+		tt.tag_group_id tagGroupId,
+		tt.name name
+		from plan_board_tag pbt
+		left join tag_type tt on pbt.tag_type_id = tt.tag_type_id
 		where plan_board_id =
 		#{plan_board_id}
 	</select>
 
 	<select id="listCommentById" parameterType="String"
 		resultType="planCommentDto">
-		select pc.comment_id commentId, 
+		select pc.comment_id commentId,
 		pc.plan_board_id planBoardId,
-		pc.member_id memberId, 
+		pc.member_id memberId,
 		m.nickname nickname,
-		pc.content content, 
-		pc.depth depth, 
+		pc.content content,
+		pc.depth depth,
 		pc.comment_group commentGroup,
-		pc.deleted deleted, 
+		pc.deleted deleted,
 		pc.register_time registerTime
 		from plan_comment pc
-		left join member m on pc.member_id = m.member_id
+		left join member m on pc.member_id =
+		m.member_id
 		where plan_board_id = #{plan_board_id}
-		order by comment_id desc
+		order by comment_id
+		desc
 	</select>
 
 	<select id="listLikeById" parameterType="String"
@@ -48,7 +56,7 @@
 		#{plan_board_id}
 	</select>
 
-	<insert id="insertArticle" parameterType="planBoardDto">
+	<insert id="insertArticle" parameterType="planBoardDto" useGeneratedKeys="true" keyProperty="planBoardId">
 		insert into plan_board (member_id, subject, content, start_date,
 		end_date, the_number_of_members
 		<if test="thumbnail != null and thumbnail != '' ">
@@ -67,8 +75,7 @@
 		update plan_board
 		set
 		subject = #{subject}, content = #{content}, start_date = #{startDate},
-		end_date = #{endDate}, the_number_of_members = #{theNumberOfMembers},
-		thumbnail = #{thumbNail}
+		end_date = #{endDate}, the_number_of_members = #{theNumberOfMembers}
 		where plan_board_id = #{planBoardId}
 	</update>
 
@@ -95,7 +102,7 @@
 	<delete id="deleteTag" parameterType="String">
 		delete from
 		plan_board_tag
-		where plan_board_tag_id = #{tagId}
+		where plan_board_id = #{planBoardId}
 	</delete>
 	<select id="searchTag" parameterType="String"
 		resultType="tagTypeDto">
@@ -180,5 +187,19 @@
 		where content_id =
 		#{contentId}
 	</select>
+
+	<!-- File -->
+	<insert id="registerFile" parameterType="com.trip.plan_board.model.dto.FileInfoDto">
+		insert into plan_board_file_info
+		(plan_board_id, save_folder, original_file, save_file)
+		values
+		(#{planBoardId}, #{saveFolder}, #{originalFile}, #{saveFile})
+	</insert>
+	
+	<select id="fileInfo" parameterType="String" resultType="com.trip.plan_board.model.dto.FileInfoDto">
+		select * from plan_board_file_info
+		where plan_board_id = #{planBoardId}
+	</select>
+	
 
 </mapper>
