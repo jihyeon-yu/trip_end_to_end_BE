@@ -29,9 +29,9 @@
 	<insert id="insertPlanLocation" parameterType="planLocationDto">
 		INSERT INTO
 		plan_location (plan_schedule_id, latitude, longitude, content_id,
-		time)
+		time, title)
 		VALUES (#{planScheduleId},#{latitude}, #{longitude},
-		#{contentId}, #{time})
+		#{contentId}, #{time}, #{title})
 	</insert>
 
 	<insert id="insertBookDetail" parameterType="bookGroupDto">

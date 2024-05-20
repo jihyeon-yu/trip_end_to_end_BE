@@ -41,7 +41,6 @@ public class PlanRestController {
 	@GetMapping("detail/{planId}")
 	public ResponseEntity<PlanRequestDto> getPlanDetailByMember(@PathVariable String planId) {
 		PlanRequestDto plan = planService.getPlanDetailByPlanId(planId);
-		System.out.println(plan.getPaymentDetails());
 		return ResponseEntity.ok(plan);
 	}
 
@@ -52,8 +51,11 @@ public class PlanRestController {
 	}
 	
 	@PutMapping("/update/{planId}")
-	public ResponseEntity<String> updatePlan(@RequestBody PlanRequestDto planRequestDto) {
-		planService.updatePlan(planRequestDto);
+	public ResponseEntity<String> updatePlan(@PathVariable String planId, @RequestBody PlanRequestDto planRequestDto) {
+		System.out.println(planRequestDto);
+		System.out.println(planId);
+		planService.deletePlan(planId);
+		planService.createPlan(planRequestDto);
 		return ResponseEntity.ok("수정이 완료되었습니다.");
 	}
 	
