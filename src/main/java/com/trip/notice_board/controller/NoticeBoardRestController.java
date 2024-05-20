@@ -67,6 +67,7 @@ public class NoticeBoardRestController {
 	@PostMapping("/insert")
 	public ResponseEntity<?> insertArticle(@RequestBody NoticeBoardDto noticeBoard) {
 		try {
+			System.out.println(noticeBoard);
 			noticeBoardService.insertArticle(noticeBoard);
 			return ResponseEntity.ok().body("{\"msg\" : 공지사항 등록이 완료되었습니다. }");
 		} catch (Exception e) {

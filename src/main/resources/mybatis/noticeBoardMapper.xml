@@ -4,34 +4,44 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper
 	namespace="com.trip.notice_board.model.mapper.NoticeBoardMapper">
-	<select id="listArticle" parameterType="map" resultType="noticeBoardDto">
+	<select id="listArticle" parameterType="map"
+		resultType="noticeBoardDto">
 		select n.notice_board_id noticeBoardId,
-		n.member_id memberId,
+		n.member_id
+		memberId,
 		m.nickname nickname,
 		n.hit hit,
 		n.subject subject,
-		n.content content,
+		n.content
+		content,
 		n.register_time registerTime,
 		n.is_fixed isFixed
-		from notice_board n
+		from
+		notice_board n
 		left join member m on n.member_id = m.member_id
-		order by n.notice_board_id desc
+		order by
+		n.is_fixed desc,
+		n.notice_board_id desc
 		limit #{start}, #{listsize};
 	</select>
 
 	<select id="detailArticleById" parameterType="String"
 		resultType="noticeBoardDto">
 		select n.notice_board_id noticeBoardId,
-		n.member_id memberId,
+		n.member_id
+		memberId,
 		m.nickname nickname,
 		n.hit hit,
 		n.subject subject,
-		n.content content,
+		n.content
+		content,
 		n.register_time registerTime,
 		n.is_fixed isFixed
-		from notice_board n
+		from
+		notice_board n
 		left join member m on n.member_id = m.member_id
-		where notice_board_id =
+		where
+		notice_board_id =
 		#{noticeBoardId}
 	</select>
 
@@ -44,7 +54,8 @@
 	<insert id="insertArticle" parameterType="noticeBoardDto">
 		insert into
 		notice_board (member_id, subject, content, is_fixed)
-		values (#{memberId},
+		values
+		(#{memberId},
 		#{subject}, #{content}, #{isFixed})
 	</insert>
 
@@ -56,15 +67,16 @@
 
 	<update id="modifyArticle" parameterType="noticeBoardDto">
 		update notice_board set
-		subject = #{subject}, content = #{content}, is_fixed = #{isFixed}
+		subject = #{subject}, content = #{content},
+		is_fixed = #{isFixed}
 		where notice_board_id =
 		#{noticeBoardId}
 	</update>
-	
+
 	<select id="getTotalArticleCount" parameterType="map"
 		resultType="int">
-		select count(b.qna_board_id)
-		from qna_board b
+		select count(b.notice_board_id)
+		from notice_board b
 		<if test="word != null and word != ''">
 			<if test="key == 'subject'">
 				where b.subject like concat('%', #{word}, '%')
@@ -74,6 +86,6 @@
 			</if>
 		</if>
 	</select>
-	
+
 
 </mapper>
