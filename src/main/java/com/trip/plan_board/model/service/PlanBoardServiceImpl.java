@@ -71,6 +71,7 @@ public class PlanBoardServiceImpl implements PlanBoardService {
 
 			// 태그 삽입
 			for (PlanBoardTagDto tag : planBoardFormDto.getTagList()) {
+				tag.setPlanBoardId(planBoardId);
 				planBoardMapper.insertTag(tag);
 			}
 		} catch (IOException e) {
@@ -170,6 +171,21 @@ public class PlanBoardServiceImpl implements PlanBoardService {
 	@Override
 	public AttractionDescriptionDto getAttractionDescription(String contentId) {
 		return planBoardMapper.getAttractionDescription(contentId);
+	}
+
+	@Override
+	public List<PlanBoardTagDto> listTagById(String planBoardId) {
+		return planBoardMapper.listTagById(planBoardId);
+	}
+
+	@Override
+	public List<PlanCommentDto> listCommentById(String planBoardId) {
+		return planBoardMapper.listCommentById(planBoardId);
+	}
+
+	@Override
+	public List<PlanLikeDto> listLikeById(String planBoardId) {
+		return planBoardMapper.listLikeById(planBoardId);
 	}
 
 }

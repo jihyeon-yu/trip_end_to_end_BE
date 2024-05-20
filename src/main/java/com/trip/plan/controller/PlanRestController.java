@@ -31,14 +31,14 @@ public class PlanRestController {
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 
-	@GetMapping("list/{id}")
+	@GetMapping("/list/{id}")
 	public ResponseEntity<List<PlanDto>> getPlanListByMember(@PathVariable String id) {
 		String memberId = planService.getMemberIdById(id);
 		List<PlanDto> plan = planService.getPlanListByMember(memberId);
 		return ResponseEntity.ok(plan);
 	}
 
-	@GetMapping("detail/{planId}")
+	@GetMapping("/detail/{planId}")
 	public ResponseEntity<PlanRequestDto> getPlanDetailByMember(@PathVariable String planId) {
 		PlanRequestDto plan = planService.getPlanDetailByPlanId(planId);
 		return ResponseEntity.ok(plan);

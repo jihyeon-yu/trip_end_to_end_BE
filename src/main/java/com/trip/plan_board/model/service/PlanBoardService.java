@@ -30,6 +30,12 @@ public interface PlanBoardService {
 	void modifyArticle(PlanBoardFormDto planBoardFormDto);
 
 	void updateHit(String planBoardId);
+	
+	List<PlanBoardTagDto> listTagById(String planBoardId);
+
+	List<PlanCommentDto> listCommentById(String planBoardId);
+
+	List<PlanLikeDto> listLikeById(String planBoardId);
 
 	/* file */
 	FileInfoDto fileInfo(String planBoardId);

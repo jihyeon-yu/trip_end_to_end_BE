@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -54,8 +55,19 @@ public class PlanBoardController {
 	public ResponseEntity<?> listArticle() {
 		try {
 			List<PlanBoardDto> list = planBoardService.listArticle();
+			List<PlanBoardFormDto> result = new ArrayList<>();
+			for (PlanBoardDto planBoard : list) {
+				PlanBoardFormDto planBordForm = new PlanBoardFormDto();
+				FileInfoDto fileInfo = planBoardService.fileInfo(planBoard.getPlanBoardId());
+				planBoard.setThumbnail(fileInfo.getSaveFile());
+				planBordForm.setPlanBoard(planBoard);
+				System.out.println(planBoardService.listTagById(planBoard.getPlanBoardId()));
+				planBordForm.setTagList(planBoardService.listTagById(planBoard.getPlanBoardId()));
+				result.add(planBordForm);
+			}
+			System.out.println("result:"+ result);
 			ObjectMapper objectMapper = new ObjectMapper();
-			return ResponseEntity.ok().body("{\"articles\":" + objectMapper.writeValueAsString(list) + "}");
+			return ResponseEntity.ok().body("{\"articles\":" + objectMapper.writeValueAsString(result) + "}");
 		} catch (Exception e) {
 			return exceptionHandling(e);
 		}

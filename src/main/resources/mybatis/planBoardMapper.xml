@@ -19,7 +19,12 @@
 
 	<select id="listTagById" parameterType="String"
 		resultType="planBoardTagDto">
-		select * from plan_board_tag
+		select pbt.plan_board_tag_id planBoardTagId,
+		pbt.plan_board_id planBoardId,
+		pbt.tag_type_id tagTypeId,
+		tt.name tagName
+		from plan_board_tag pbt
+		left join tag_type tt on pbt.tag_type_id = tt.tag_type_id
 		where plan_board_id =
 		#{plan_board_id}
 	</select>
