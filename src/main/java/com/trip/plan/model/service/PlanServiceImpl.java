@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.trip.member.model.mapper.MemberMapper;
 import com.trip.plan.model.dto.BookGroupDto;
 import com.trip.plan.model.dto.PaymentDetailDto;
 import com.trip.plan.model.dto.PlanDto;
@@ -20,7 +21,10 @@ public class PlanServiceImpl implements PlanService {
 
 	@Autowired
 	private PlanMapper planMapper;
-
+	
+	@Autowired
+	private MemberMapper memberMapper;
+	
 	@Override
 	public void createPlan(PlanRequestDto planRequestDto) {
 		planMapper.insertPlan(planRequestDto.getPlanDto());
@@ -124,6 +128,11 @@ public class PlanServiceImpl implements PlanService {
 		}
 		
 		// Location, planGroup은 수정 없이 삭제만 가능
+	}
+
+	@Override
+	public String getMemberIdById(String id) {
+		return memberMapper.getMemberIdById(id);
 	}
 
 }

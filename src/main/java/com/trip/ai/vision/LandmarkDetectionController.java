@@ -1,4 +1,4 @@
-package com.trip.vision;
+package com.trip.ai.vision;
 
 import java.io.IOException;
 import java.util.ArrayList;

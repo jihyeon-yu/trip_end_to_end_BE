@@ -18,4 +18,5 @@ public class PlanLocationDto {
 	private String longitude;
 	private String contentId;
 	private String time;
+	private String title;
 }
