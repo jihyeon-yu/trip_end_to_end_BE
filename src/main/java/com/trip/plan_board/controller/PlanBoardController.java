@@ -66,28 +66,25 @@ public class PlanBoardController {
 		try {
 			PlanBoardDetailDto planBoardDetailDto = planBoardService.detailArticleById(planBoardId);
 			planBoardService.updateHit(planBoardId);
+			FileInfoDto fileInfo = planBoardService.fileInfo(planBoardId);
+			planBoardDetailDto.getPlanBoard().setThumbnail(fileInfo.getSaveFile());
 			ObjectMapper objectMapper = new ObjectMapper();
-			return ResponseEntity.ok()
-					.body(objectMapper.writeValueAsString(planBoardDetailDto));
+			return ResponseEntity.ok().body(objectMapper.writeValueAsString(planBoardDetailDto));
 		} catch (Exception e) {
 			return exceptionHandling(e);
 		}
 	}
 
 	@PostMapping("/insert")
-	public ResponseEntity<?> writeArticle(@RequestPart(name="planBoardForm") PlanBoardFormDto planBoardForm,
-			@RequestPart(name="thumbnail", required = false) MultipartFile file) {
+	public ResponseEntity<?> writeArticle(@RequestPart(name = "planBoardForm") PlanBoardFormDto planBoardForm,
+			@RequestPart(name = "thumbnail", required = false) MultipartFile file) {
 		try {
-			System.out.println(planBoardForm);
-			System.out.println(file);
 			planBoardService.insertArticle(planBoardForm, file);
-			
 			return ResponseEntity.ok().body("{\"msg\":" + "게시글 등록이 완료되었습니다. }");
 		} catch (Exception e) {
 			return exceptionHandling(e);
 		}
 	}
-	
 
 	@DeleteMapping("/{planBoardId}")
 	public ResponseEntity<?> deleteArticle(@PathVariable String planBoardId) {
@@ -163,7 +160,7 @@ public class PlanBoardController {
 			return exceptionHandling(e);
 		}
 	}
-	
+
 	@GetMapping("/tag/{tagName}")
 	public ResponseEntity<?> searchTag(@PathVariable String tagName) {
 		try {
@@ -195,7 +192,7 @@ public class PlanBoardController {
 			return exceptionHandling(e);
 		}
 	}
-	
+
 	/* map */
 	@GetMapping("/map/sido")
 	public ResponseEntity<?> getSido() {
@@ -207,7 +204,7 @@ public class PlanBoardController {
 			return exceptionHandling(e);
 		}
 	}
-	
+
 	@GetMapping("/map/gugun/{sidoCode}")
 	public ResponseEntity<?> getGugun(@PathVariable String sidoCode) {
 		try {
@@ -218,7 +215,7 @@ public class PlanBoardController {
 			return exceptionHandling(e);
 		}
 	}
-	
+
 	@GetMapping("/map/attractioninfo")
 	public ResponseEntity<?> attractionInfo(@RequestParam Map<String, String> map) {
 		try {
@@ -228,9 +225,9 @@ public class PlanBoardController {
 		} catch (Exception e) {
 			return exceptionHandling(e);
 		}
-		
+
 	}
-	
+
 	@GetMapping("/map/attractiondescription/{contentId}")
 	public ResponseEntity<?> attractionDescription(@PathVariable String contentId) {
 		try {
@@ -241,7 +238,7 @@ public class PlanBoardController {
 			return exceptionHandling(e);
 		}
 	}
-	
+
 	private ResponseEntity<?> exceptionHandling(Exception e) {
 		e.printStackTrace();
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error : " + e.getMessage());

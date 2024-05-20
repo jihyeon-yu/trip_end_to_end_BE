@@ -50,7 +50,7 @@
 		#{plan_board_id}
 	</select>
 
-	<insert id="insertArticle" parameterType="planBoardDto">
+	<insert id="insertArticle" parameterType="planBoardDto" useGeneratedKeys="true" keyProperty="planBoardId">
 		insert into plan_board (member_id, subject, content, start_date,
 		end_date, the_number_of_members
 		<if test="thumbnail != null and thumbnail != '' ">
@@ -185,17 +185,15 @@
 
 	<!-- File -->
 	<insert id="registerFile" parameterType="com.trip.plan_board.model.dto.FileInfoDto">
-		insert into file_info
-		(plan_board_id, save_folder, original_file, save_file, type)
+		insert into plan_board_file_info
+		(plan_board_id, save_folder, original_file, save_file)
 		values
-		(#{planBoardId}, #{saveFolder}, #{originalFile},
-		#{saveFile}, 2)
+		(#{planBoardId}, #{saveFolder}, #{originalFile}, #{saveFile})
 	</insert>
 	
 	<select id="fileInfo" parameterType="String" resultType="com.trip.plan_board.model.dto.FileInfoDto">
-		select * from file_info
+		select * from plan_board_file_info
 		where plan_board_id = #{planBoardId}
-		and type = 2
 	</select>
 
 </mapper>

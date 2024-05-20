@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.trip.plan_board.model.dto.AttractionDescriptionDto;
 import com.trip.plan_board.model.dto.AttractionInfoDto;
+import com.trip.plan_board.model.dto.FileInfoDto;
 import com.trip.plan_board.model.dto.GugunDto;
 import com.trip.plan_board.model.dto.SidoDto;
 import com.trip.plan_board.model.dto.TagTypeDto;
@@ -29,6 +30,9 @@ public interface PlanBoardService {
 	void modifyArticle(PlanBoardFormDto planBoardFormDto);
 
 	void updateHit(String planBoardId);
+
+	/* file */
+	FileInfoDto fileInfo(String planBoardId);
 
 	/* comment */
 	void insertComment(PlanCommentDto planCommentDto);

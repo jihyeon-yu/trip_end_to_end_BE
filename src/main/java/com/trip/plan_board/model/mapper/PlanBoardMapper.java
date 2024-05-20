@@ -30,7 +30,7 @@ public interface PlanBoardMapper {
 
 	List<PlanLikeDto> listLikeById(String planBoardId);
 
-	void insertArticle(PlanBoardDto planBoardDto);
+	int insertArticle(PlanBoardDto planBoardDto);
 
 	void deleteArticle(String planBoardId);
 

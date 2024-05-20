@@ -54,29 +54,29 @@ public class PlanBoardServiceImpl implements PlanBoardService {
 	public void insertArticle(PlanBoardFormDto planBoardFormDto, MultipartFile file) {
 		try {
 			System.out.println(planBoardFormDto + " | " + file);
+
+			// 게시글 정보 업데이트
+			PlanBoardDto planBoard = planBoardFormDto.getPlanBoard();
+			planBoardMapper.insertArticle(planBoard);
+			String planBoardId = planBoard.getPlanBoardId();
 			String fileName = generateImageUrl(file);
-			System.out.println(fileName);
+
+			// 파일 업로드
 			FileInfoDto fileInfoDto = new FileInfoDto();
-			fileInfoDto.setPlanBoardId(planBoardFormDto.getPlanBoard().getPlanBoardId());
-	        fileInfoDto.setSaveFolder(uploadDir); // 파일을 저장할 경로
-	        fileInfoDto.setOriginalFile(file.getOriginalFilename()); // 원래 파일 이름
-	        fileInfoDto.setSaveFile(fileName); // 저장된 파일 이름 (plan_board의 thumbnail 필드 값)
-	        planBoardMapper.registerFile(fileInfoDto); // 파일 정보를 데이터베이스에 저장
-	        
-	        // 게시글 정보 업데이트
-	        PlanBoardDto planBoard = planBoardFormDto.getPlanBoard();
-	        planBoard.setThumbnail(fileInfoDto.getFileInfoId()); // 파일 정보의 ID를 썸네일로 설정
-	        planBoardMapper.insertArticle(planBoard);
-	        
-	        // 태그 정보 업데이트
-	        for (PlanBoardTagDto tag : planBoardFormDto.getTagList()) {
-	            planBoardMapper.insertTag(tag);
-	        }
+			fileInfoDto.setPlanBoardId(planBoardId);
+			fileInfoDto.setSaveFolder(uploadDir); // 파일을 저장할 경로
+			fileInfoDto.setOriginalFile(file.getOriginalFilename()); // 원래 파일 이름
+			fileInfoDto.setSaveFile(fileName); // 저장된 파일 이름 (plan_board의 thumbnail 필드 값)
+			planBoardMapper.registerFile(fileInfoDto); // 파일 정보를 데이터베이스에 저장
+
+			// 태그 삽입
+			for (PlanBoardTagDto tag : planBoardFormDto.getTagList()) {
+				planBoardMapper.insertTag(tag);
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		
+
 	}
 
 	private String generateImageUrl(MultipartFile file) throws IOException {
@@ -86,6 +86,11 @@ public class PlanBoardServiceImpl implements PlanBoardService {
 		File targetFile = new File(uploadDir, fileName);
 		file.transferTo(targetFile);
 		return fileName;
+	}
+
+	@Override
+	public FileInfoDto fileInfo(String planBoardId) {
+		return planBoardMapper.fileInfo(planBoardId);
 	}
 
 	@Override
@@ -166,4 +171,5 @@ public class PlanBoardServiceImpl implements PlanBoardService {
 	public AttractionDescriptionDto getAttractionDescription(String contentId) {
 		return planBoardMapper.getAttractionDescription(contentId);
 	}
+
 }
