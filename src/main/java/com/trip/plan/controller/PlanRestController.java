@@ -31,15 +31,15 @@ public class PlanRestController {
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 
-	@GetMapping("list/{memberId}")
-	public ResponseEntity<List<PlanDto>> getPlanListByMember(@PathVariable String memberId) {
+	@GetMapping("list/{id}")
+	public ResponseEntity<List<PlanDto>> getPlanListByMember(@PathVariable String id) {
+		String memberId = planService.getMemberIdById(id);
 		List<PlanDto> plan = planService.getPlanListByMember(memberId);
 		return ResponseEntity.ok(plan);
 	}
 
-	@GetMapping("detail/{memberId}/{planId}")
-	public ResponseEntity<PlanRequestDto> getPlanDetailByMember(@PathVariable String memberId,
-			@PathVariable String planId) {
+	@GetMapping("detail/{planId}")
+	public ResponseEntity<PlanRequestDto> getPlanDetailByMember(@PathVariable String planId) {
 		PlanRequestDto plan = planService.getPlanDetailByPlanId(planId);
 		return ResponseEntity.ok(plan);
 	}
@@ -51,8 +51,11 @@ public class PlanRestController {
 	}
 	
 	@PutMapping("/update/{planId}")
-	public ResponseEntity<String> updatePlan(@RequestBody PlanRequestDto planRequestDto) {
-		planService.updatePlan(planRequestDto);
+	public ResponseEntity<String> updatePlan(@PathVariable String planId, @RequestBody PlanRequestDto planRequestDto) {
+		System.out.println(planRequestDto);
+		System.out.println(planId);
+		planService.deletePlan(planId);
+		planService.createPlan(planRequestDto);
 		return ResponseEntity.ok("수정이 완료되었습니다.");
 	}
 	
