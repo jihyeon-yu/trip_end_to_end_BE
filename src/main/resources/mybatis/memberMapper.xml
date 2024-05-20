@@ -25,6 +25,10 @@
 		SELECT * FROM member
 	</select>
 	
+	<select id="getMemberIdById" resultType="String" parameterType="String">
+		SELECT member_id FROM member WHERE id = #{id}
+	</select>
+	
 	<!-- Update member -->
 	<update id="updateMember" parameterType="memberDto">
 		UPDATE member

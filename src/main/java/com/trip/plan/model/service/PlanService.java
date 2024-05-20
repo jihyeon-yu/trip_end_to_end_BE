@@ -11,4 +11,5 @@ public interface PlanService {
 	PlanRequestDto getPlanDetailByPlanId(String planId);
 	void updatePlan(PlanRequestDto planRequestDto);
 	void deletePlan(String planId);
+	String getMemberIdById(String id);
 }

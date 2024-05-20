@@ -1,4 +1,4 @@
-package com.trip.vision;
+package com.trip.ai.vision;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
