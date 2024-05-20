@@ -15,5 +15,6 @@ public class PlanBoardTagDto {
 	private String planBoardTagId;
 	private String planBoardId;
 	private String tagTypeId;
-	private String tagName;
+	private String tagGroupId;
+	private String name;
 }

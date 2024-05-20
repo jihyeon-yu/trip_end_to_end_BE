@@ -51,7 +51,7 @@ public interface PlanBoardMapper {
 	/* tag */
 	void insertTag(PlanBoardTagDto planBoardTagDto);
 
-	void deleteTag(String planBoardTagId);
+	void deleteTag(String planBoardId);
 
 	List<TagTypeDto> searchTag(String tagName);
 

@@ -101,9 +101,11 @@ public class PlanBoardServiceImpl implements PlanBoardService {
 
 	@Override
 	public void modifyArticle(PlanBoardFormDto planBoardFormDto) {
+		System.out.println(planBoardFormDto);
 		planBoardMapper.modifyArticle(planBoardFormDto.getPlanBoard());
 		planBoardMapper.deleteTag(planBoardFormDto.getPlanBoard().getPlanBoardId());
 		for (PlanBoardTagDto tag : planBoardFormDto.getTagList()) {
+			tag.setPlanBoardId(planBoardFormDto.getPlanBoard().getPlanBoardId());
 			planBoardMapper.insertTag(tag);
 		}
 	}

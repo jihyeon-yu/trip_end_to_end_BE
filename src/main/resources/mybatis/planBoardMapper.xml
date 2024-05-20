@@ -22,7 +22,8 @@
 		select pbt.plan_board_tag_id planBoardTagId,
 		pbt.plan_board_id planBoardId,
 		pbt.tag_type_id tagTypeId,
-		tt.name tagName
+		tt.tag_group_id tagGroupId,
+		tt.name name
 		from plan_board_tag pbt
 		left join tag_type tt on pbt.tag_type_id = tt.tag_type_id
 		where plan_board_id =
@@ -74,8 +75,7 @@
 		update plan_board
 		set
 		subject = #{subject}, content = #{content}, start_date = #{startDate},
-		end_date = #{endDate}, the_number_of_members = #{theNumberOfMembers},
-		thumbnail = #{thumbNail}
+		end_date = #{endDate}, the_number_of_members = #{theNumberOfMembers}
 		where plan_board_id = #{planBoardId}
 	</update>
 
@@ -102,7 +102,7 @@
 	<delete id="deleteTag" parameterType="String">
 		delete from
 		plan_board_tag
-		where plan_board_tag_id = #{tagId}
+		where plan_board_id = #{planBoardId}
 	</delete>
 	<select id="searchTag" parameterType="String"
 		resultType="tagTypeDto">
