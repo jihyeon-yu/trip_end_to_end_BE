@@ -3,6 +3,8 @@ package com.trip.plan_board.model.service;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.trip.plan_board.model.dto.AttractionDescriptionDto;
 import com.trip.plan_board.model.dto.AttractionInfoDto;
 import com.trip.plan_board.model.dto.GugunDto;
@@ -20,7 +22,7 @@ public interface PlanBoardService {
 
 	PlanBoardDetailDto detailArticleById(String planBoardId);
 
-	void insertArticle(PlanBoardFormDto planBoardFormDto);
+	void insertArticle(PlanBoardFormDto planBoardFormDto, MultipartFile file);
 
 	void deleteArticle(String planBoardId);
 

@@ -26,19 +26,21 @@
 
 	<select id="listCommentById" parameterType="String"
 		resultType="planCommentDto">
-		select pc.comment_id commentId, 
+		select pc.comment_id commentId,
 		pc.plan_board_id planBoardId,
-		pc.member_id memberId, 
+		pc.member_id memberId,
 		m.nickname nickname,
-		pc.content content, 
-		pc.depth depth, 
+		pc.content content,
+		pc.depth depth,
 		pc.comment_group commentGroup,
-		pc.deleted deleted, 
+		pc.deleted deleted,
 		pc.register_time registerTime
 		from plan_comment pc
-		left join member m on pc.member_id = m.member_id
+		left join member m on pc.member_id =
+		m.member_id
 		where plan_board_id = #{plan_board_id}
-		order by comment_id desc
+		order by comment_id
+		desc
 	</select>
 
 	<select id="listLikeById" parameterType="String"
@@ -179,6 +181,21 @@
 		from attraction_description
 		where content_id =
 		#{contentId}
+	</select>
+
+	<!-- File -->
+	<insert id="registerFile" parameterType="com.trip.plan_board.model.dto.FileInfoDto">
+		insert into file_info
+		(plan_board_id, save_folder, original_file, save_file, type)
+		values
+		(#{planBoardId}, #{saveFolder}, #{originalFile},
+		#{saveFile}, 2)
+	</insert>
+	
+	<select id="fileInfo" parameterType="String" resultType="com.trip.plan_board.model.dto.FileInfoDto">
+		select * from file_info
+		where plan_board_id = #{planBoardId}
+		and type = 2
 	</select>
 
 </mapper>
