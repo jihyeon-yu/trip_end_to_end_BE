@@ -59,5 +59,13 @@ public class PlanRestController {
 		return ResponseEntity.ok("수정이 완료되었습니다.");
 	}
 	
+	@GetMapping("/getnickname/{memberId}")
+	public ResponseEntity<String> getNicknameById(@PathVariable String memberId) {
+		String nickname = planService.getNicknameById(memberId);
+		System.out.println(nickname);
+		return ResponseEntity.ok(nickname);
+	}
+	
+	
 
 }

@@ -17,5 +17,5 @@ public interface MemberMapper {
 	void updateToken(@Param("id") String id, @Param("token") String token);
 	void deleteMember(@Param("id") String id);
 	String getMemberIdById(String id);
-	
+	String getNicknameByMemberId(String memberId);
 }

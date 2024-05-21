@@ -1,7 +1,9 @@
 package com.trip.plan.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,10 +23,10 @@ public class PlanServiceImpl implements PlanService {
 
 	@Autowired
 	private PlanMapper planMapper;
-	
+
 	@Autowired
 	private MemberMapper memberMapper;
-	
+
 	@Override
 	public void createPlan(PlanRequestDto planRequestDto) {
 		planMapper.insertPlan(planRequestDto.getPlanDto());
@@ -38,21 +40,23 @@ public class PlanServiceImpl implements PlanService {
 		}
 		// 여행 기간별 일자 추가
 		if (planRequestDto.getScheduleDates().size() != 0) {
-			for (PlanScheduleDto planScheduleDto : planRequestDto.getScheduleDates()) {
-				planScheduleDto.setPlanId(planId);
-				planMapper.insertPlanSchedule(planScheduleDto);
-			}
-		}
-		// 일자별 방문 장소 추가
-		if (planRequestDto.getPlanLocations().size() != 0) {
-			String planScheduleId = planMapper.searchLastPlanScheduleId();
-			for (List<PlanLocationDto> planLocationList : planRequestDto.getPlanLocations()) {
-				for (PlanLocationDto planLocation : planLocationList) {
-					planLocation.setPlanScheduleId(planScheduleId);
-					planMapper.insertPlanLocation(planLocation);
+		    // 각 날짜에 대한 새로운 planScheduleId를 생성
+			
+		    for (int i=0; i < planRequestDto.getScheduleDates().size(); i++) {
+		    	PlanScheduleDto planScheduleDto = planRequestDto.getScheduleDates().get(i);
+		        planScheduleDto.setPlanId(planId);
+		        planMapper.insertPlanSchedule(planScheduleDto);
+		        
+				// 일자별 방문 장소 추가
+				if (planRequestDto.getPlanLocations().get(i).size() != 0) {
+			        for (PlanLocationDto planLocation : planRequestDto.getPlanLocations().get(i)) {
+			        	planLocation.setPlanScheduleId(planMapper.searchLastPlanScheduleId());
+			            planMapper.insertPlanLocation(planLocation);
+			        }
 				}
-			}
+		    }
 		}
+
 		// 예약 내역 추가
 		if (planRequestDto.getBookContents().size() != 0) {
 			for (BookGroupDto bookGroupDto : planRequestDto.getBookContents()) {
@@ -113,26 +117,31 @@ public class PlanServiceImpl implements PlanService {
 		// 예약 내역 수정
 		List<BookGroupDto> bookGroupDtoList = planRequestDto.getBookContents();
 		System.out.println(bookGroupDtoList);
-		for(BookGroupDto bookGroupDto : bookGroupDtoList) {
+		for (BookGroupDto bookGroupDto : bookGroupDtoList) {
 			planMapper.updateBookDetail(bookGroupDto);
 		}
 		// 여행 기간 일자별 수정
 		List<PlanScheduleDto> planScheduleDtoList = planRequestDto.getScheduleDates();
-		for(PlanScheduleDto planScheduleDto : planScheduleDtoList) {
+		for (PlanScheduleDto planScheduleDto : planScheduleDtoList) {
 			planMapper.updatePlanSchule(planScheduleDto);
 		}
 		// 결제 내역 수정
 		List<PaymentDetailDto> paymentDetailDtoList = planRequestDto.getPaymentDetails();
-		for(PaymentDetailDto paymentDetailDto : paymentDetailDtoList) {
+		for (PaymentDetailDto paymentDetailDto : paymentDetailDtoList) {
 			planMapper.updatePaymentDetail(paymentDetailDto);
 		}
-		
+
 		// Location, planGroup은 수정 없이 삭제만 가능
 	}
 
 	@Override
 	public String getMemberIdById(String id) {
 		return memberMapper.getMemberIdById(id);
+	}
+
+	@Override
+	public String getNicknameById(String memberId) {
+		return memberMapper.getNicknameByMemberId(memberId);
 	}
 
 }
