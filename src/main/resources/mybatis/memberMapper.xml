@@ -28,6 +28,10 @@
 		SELECT member_id FROM member WHERE id = #{id}
 	</select>
 	
+	<select id="getNicknameByMemberId" resultType="String" parameterType="String">
+		SELECT nickname FROM member WHERE member_id = #{memberId}
+	</select>
+	
 	<!-- Update member -->
 	<update id="updateMember" parameterType="memberDto" useGeneratedKeys="true" keyProperty="memberId">
 		UPDATE member
