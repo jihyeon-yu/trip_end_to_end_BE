@@ -9,7 +9,7 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @ToString
-public class FileInfoDto {
+public class PlanBoardFileInfoDto {
 	private String fileInfoId;
 	private String planBoardId;
 	private String saveFolder;

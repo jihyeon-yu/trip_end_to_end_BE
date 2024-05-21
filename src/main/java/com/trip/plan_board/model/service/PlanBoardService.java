@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.trip.plan_board.model.dto.AttractionDescriptionDto;
 import com.trip.plan_board.model.dto.AttractionInfoDto;
-import com.trip.plan_board.model.dto.FileInfoDto;
+import com.trip.plan_board.model.dto.PlanBoardFileInfoDto;
 import com.trip.plan_board.model.dto.GugunDto;
 import com.trip.plan_board.model.dto.SidoDto;
 import com.trip.plan_board.model.dto.TagTypeDto;
@@ -24,6 +24,8 @@ public interface PlanBoardService {
 	PlanBoardDetailDto detailArticleById(String planBoardId);
 
 	void insertArticle(PlanBoardFormDto planBoardFormDto, MultipartFile file);
+	
+	void insertArticle(PlanBoardFormDto planBoardFormDto);
 
 	void deleteArticle(String planBoardId);
 
@@ -38,7 +40,7 @@ public interface PlanBoardService {
 	List<PlanLikeDto> listLikeById(String planBoardId);
 
 	/* file */
-	FileInfoDto fileInfo(String planBoardId);
+	PlanBoardFileInfoDto fileInfo(String planBoardId);
 
 	/* comment */
 	void insertComment(PlanCommentDto planCommentDto);

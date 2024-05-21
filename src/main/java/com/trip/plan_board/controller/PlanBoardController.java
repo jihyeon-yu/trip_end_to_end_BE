@@ -23,7 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.trip.plan_board.model.dto.AttractionDescriptionDto;
 import com.trip.plan_board.model.dto.AttractionInfoDto;
-import com.trip.plan_board.model.dto.FileInfoDto;
+import com.trip.plan_board.model.dto.PlanBoardFileInfoDto;
 import com.trip.plan_board.model.dto.GugunDto;
 import com.trip.plan_board.model.dto.PlanBoardDto;
 import com.trip.plan_board.model.dto.PlanBoardTagDto;
@@ -58,14 +58,13 @@ public class PlanBoardController {
 			List<PlanBoardFormDto> result = new ArrayList<>();
 			for (PlanBoardDto planBoard : list) {
 				PlanBoardFormDto planBordForm = new PlanBoardFormDto();
-				FileInfoDto fileInfo = planBoardService.fileInfo(planBoard.getPlanBoardId());
-				planBoard.setThumbnail(fileInfo.getSaveFile());
+				PlanBoardFileInfoDto fileInfo = planBoardService.fileInfo(planBoard.getPlanBoardId());
+				if (fileInfo instanceof PlanBoardFileInfoDto)
+					planBoard.setThumbnail(fileInfo.getSaveFile());
 				planBordForm.setPlanBoard(planBoard);
-				System.out.println(planBoardService.listTagById(planBoard.getPlanBoardId()));
 				planBordForm.setTagList(planBoardService.listTagById(planBoard.getPlanBoardId()));
 				result.add(planBordForm);
 			}
-			System.out.println("result:"+ result);
 			ObjectMapper objectMapper = new ObjectMapper();
 			return ResponseEntity.ok().body("{\"articles\":" + objectMapper.writeValueAsString(result) + "}");
 		} catch (Exception e) {
@@ -78,8 +77,9 @@ public class PlanBoardController {
 		try {
 			PlanBoardDetailDto planBoardDetailDto = planBoardService.detailArticleById(planBoardId);
 			planBoardService.updateHit(planBoardId);
-			FileInfoDto fileInfo = planBoardService.fileInfo(planBoardId);
-			planBoardDetailDto.getPlanBoard().setThumbnail(fileInfo.getSaveFile());
+			PlanBoardFileInfoDto fileInfo = planBoardService.fileInfo(planBoardId);
+			if (fileInfo instanceof PlanBoardFileInfoDto)
+				planBoardDetailDto.getPlanBoard().setThumbnail(fileInfo.getSaveFile());
 			ObjectMapper objectMapper = new ObjectMapper();
 			return ResponseEntity.ok().body(objectMapper.writeValueAsString(planBoardDetailDto));
 		} catch (Exception e) {
@@ -91,7 +91,10 @@ public class PlanBoardController {
 	public ResponseEntity<?> writeArticle(@RequestPart(name = "planBoardForm") PlanBoardFormDto planBoardForm,
 			@RequestPart(name = "thumbnail", required = false) MultipartFile file) {
 		try {
-			planBoardService.insertArticle(planBoardForm, file);
+			if (file != null)
+				planBoardService.insertArticle(planBoardForm, file);
+			else
+				planBoardService.insertArticle(planBoardForm);
 			return ResponseEntity.ok().body("{\"msg\":" + "게시글 등록이 완료되었습니다. }");
 		} catch (Exception e) {
 			return exceptionHandling(e);
