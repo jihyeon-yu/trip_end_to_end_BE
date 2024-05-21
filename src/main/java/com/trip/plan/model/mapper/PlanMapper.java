@@ -18,6 +18,8 @@ public interface PlanMapper {
 	
 	List<PlanDto> searchPlanList(String memberId);
 	
+	List<PlanDto> searchAllPlanList(String memberId);
+	
 	PlanDto searchPlanByPlanId(String planId);
 	
 	List<PlanGroupDto> searchPlanGroup(String planId);
