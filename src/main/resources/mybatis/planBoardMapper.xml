@@ -189,14 +189,14 @@
 	</select>
 
 	<!-- File -->
-	<insert id="registerFile" parameterType="com.trip.plan_board.model.dto.FileInfoDto">
+	<insert id="registerFile" parameterType="planBoardFileInfoDto">
 		insert into plan_board_file_info
 		(plan_board_id, save_folder, original_file, save_file)
 		values
 		(#{planBoardId}, #{saveFolder}, #{originalFile}, #{saveFile})
 	</insert>
 	
-	<select id="fileInfo" parameterType="String" resultType="com.trip.plan_board.model.dto.FileInfoDto">
+	<select id="fileInfo" parameterType="String" resultType="planBoardFileInfoDto">
 		select * from plan_board_file_info
 		where plan_board_id = #{planBoardId}
 	</select>

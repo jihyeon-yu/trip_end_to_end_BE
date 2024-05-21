@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.trip.plan_board.model.dto.AttractionDescriptionDto;
 import com.trip.plan_board.model.dto.AttractionInfoDto;
-import com.trip.plan_board.model.dto.FileInfoDto;
+import com.trip.plan_board.model.dto.PlanBoardFileInfoDto;
 import com.trip.plan_board.model.dto.GugunDto;
 import com.trip.plan_board.model.dto.SidoDto;
 import com.trip.plan_board.model.dto.TagTypeDto;
@@ -37,9 +37,9 @@ public interface PlanBoardMapper {
 	void modifyArticle(PlanBoardDto planBoardDto);
 
 	/* file */
-	void registerFile(FileInfoDto fileInfo);
+	void registerFile(PlanBoardFileInfoDto fileInfo);
 
-	FileInfoDto fileInfo(String planBoardId);
+	PlanBoardFileInfoDto fileInfo(String planBoardId);
 
 	/* comment */
 	void insertComment(PlanCommentDto planCommentDto);
