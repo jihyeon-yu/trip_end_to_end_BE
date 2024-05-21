@@ -112,12 +112,17 @@ public class PlanBoardController {
 	}
 
 	@PutMapping("/{planBoardId}")
-	public ResponseEntity<?> modifyArticle(@PathVariable String planBoardId, @RequestBody PlanBoardFormDto planBoard) {
+	public ResponseEntity<?> modifyArticle(@PathVariable String planBoardId,
+			@RequestPart(name = "planBoardForm") PlanBoardFormDto planBoardForm,
+			@RequestPart(name = "thumbnail", required = false) MultipartFile file) {
 		try {
-			if (!planBoardId.equals(planBoard.getPlanBoard().getPlanBoardId())) {
+			if (!planBoardId.equals(planBoardForm.getPlanBoard().getPlanBoardId())) {
 				return ResponseEntity.badRequest().body("{\"msg\":" + "잘못된 요청입니다. }");
 			}
-			planBoardService.modifyArticle(planBoard);
+			if (file != null)
+				planBoardService.modifyArticle(planBoardForm, file);
+			else
+				planBoardService.modifyArticle(planBoardForm);
 			return ResponseEntity.ok().body("{\"msg\":" + "게시글 수정이 완료되었습니다. }");
 		} catch (Exception e) {
 			return exceptionHandling(e);

@@ -40,6 +40,8 @@ public interface PlanBoardMapper {
 	void registerFile(PlanBoardFileInfoDto fileInfo);
 
 	PlanBoardFileInfoDto fileInfo(String planBoardId);
+	
+	void updateFile(PlanBoardFileInfoDto fileInfo);
 
 	/* comment */
 	void insertComment(PlanCommentDto planCommentDto);

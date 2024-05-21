@@ -201,5 +201,13 @@
 		where plan_board_id = #{planBoardId}
 	</select>
 	
+	<update id="updateFile" parameterType="planBoardFileInfoDto">
+		update plan_board_file_info
+		set save_folder = #{saveFolder},
+		original_file = #{originalFile},
+		save_file = #{saveFile}
+		where plan_board_id = #{planBoardId}
+	</update>
+	
 
 </mapper>
