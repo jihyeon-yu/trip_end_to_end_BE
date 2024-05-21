@@ -73,9 +73,7 @@ public class MemberServiceImpl implements MemberService {
         // 프로필 이미지 설정
 		try {
 			Path uploadPath = Paths.get(uploadDir);
-			System.out.println(uploadPath);
 			if (!Files.exists(uploadPath)) {
-				System.out.println("check");
 				Files.createDirectories(uploadPath);
 			}
 			String fileName = generateImageUrl(file);
@@ -130,7 +128,33 @@ public class MemberServiceImpl implements MemberService {
         memberMapper.updateMember(memberDto);
         return true;
     }
-
+    @Override
+	public boolean updateMember(MemberDto memberDto, MultipartFile file) {
+    	if (memberMapper.findById(memberDto.getId()) == null) {
+            return false; // 해당 아이디가 존재하지 않는 경우
+        }
+        memberMapper.updateMember(memberDto);
+        try {
+			Path uploadPath = Paths.get(uploadDir);
+			if (!Files.exists(uploadPath)) {
+				Files.createDirectories(uploadPath);
+			}
+			String fileName = generateImageUrl(file);
+			MemberFileInfoDto fileInfoDto = new MemberFileInfoDto();
+	        fileInfoDto.setMemberId(memberDto.getMemberId());
+	        fileInfoDto.setSaveFolder(uploadDir);
+	        fileInfoDto.setOriginalFile(file.getOriginalFilename());
+	        fileInfoDto.setSaveFile(fileName);
+	        MemberFileInfoDto isExisted = memberMapper.fileInfo(memberDto.getMemberId());
+	        if (isExisted instanceof MemberFileInfoDto)
+	        	memberMapper.updateFile(fileInfoDto);
+	        else
+	        	memberMapper.registerFile(fileInfoDto);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+        return true;
+	}
     @Override
     public boolean deleteMember(String id) {
     	MemberDto memberDto = memberMapper.findById(id);
@@ -165,8 +189,8 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public MemberFileInfoDto fileInfo(String memberId) {
-		System.out.println(memberId);
-		System.out.println(memberMapper.fileInfo(memberId));
 		return memberMapper.fileInfo(memberId);
 	}
+
+	
 }

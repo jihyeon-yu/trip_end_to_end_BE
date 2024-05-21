@@ -3,7 +3,6 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.trip.member.model.mapper.MemberMapper">
-
 	<!-- Insert a new member -->
 	<insert id="insertMember" parameterType="memberDto" useGeneratedKeys="true" keyProperty="memberId">
 		INSERT INTO member
@@ -30,7 +29,7 @@
 	</select>
 	
 	<!-- Update member -->
-	<update id="updateMember" parameterType="memberDto">
+	<update id="updateMember" parameterType="memberDto" useGeneratedKeys="true" keyProperty="memberId">
 		UPDATE member
 		SET name = #{name}, birthdate = #{birthdate},
 		image = #{image}, email_id = #{emailId}, email_domain =
@@ -69,4 +68,13 @@
 		SELECT * FROM member_file_info
 		WHERE member_id = #{memberId}
 	</select>
+	
+	<!--  Update Profile Image -->
+	<update id="updateFile" parameterType="memberFileInfoDto">
+		UPDATE member_file_info
+		SET save_folder = #{saveFolder},
+		original_file = #{originalFile},
+		save_file = #{saveFile}
+		where member_id = #{memberId}
+	</update>
 </mapper>

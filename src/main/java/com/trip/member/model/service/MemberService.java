@@ -27,6 +27,8 @@ public interface MemberService {
 
 	boolean updateMember(MemberDto memberDto);
 	
+	boolean updateMember(MemberDto memberDto, MultipartFile file);
+	
 	boolean changePassword(MemberChangePasswordDto memberChangePasswordDto);
 
 	boolean deleteMember(String id);
