@@ -192,5 +192,10 @@ public class MemberServiceImpl implements MemberService {
 		return memberMapper.fileInfo(memberId);
 	}
 
+	@Override
+	public MemberDto getMemberDtoByMemberId(String memberId) {
+		return memberMapper.getMemberDtoByMemberId(memberId);
+	}
+
 	
 }

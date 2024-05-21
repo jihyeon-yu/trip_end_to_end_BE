@@ -32,6 +32,6 @@ public interface MemberMapper {
 
 	void updateFile(MemberFileInfoDto fileInfo);
 
-	String getNicknameByMemberId(String memberId);
+	MemberDto getMemberDtoByMemberId(String memberId);
 
 }

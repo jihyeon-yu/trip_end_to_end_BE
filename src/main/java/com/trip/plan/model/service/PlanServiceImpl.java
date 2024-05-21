@@ -143,9 +143,6 @@ public class PlanServiceImpl implements PlanService {
 		return memberMapper.getMemberIdById(id);
 	}
 
-	@Override
-	public String getNicknameById(String memberId) {
-		return memberMapper.getNicknameByMemberId(memberId);
-	}
+ 
 
 }

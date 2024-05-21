@@ -28,8 +28,8 @@
 		SELECT member_id FROM member WHERE id = #{id}
 	</select>
 	
-	<select id="getNicknameByMemberId" resultType="String" parameterType="String">
-		SELECT nickname FROM member WHERE member_id = #{memberId}
+	<select id="getMemberDtoByMemberId" resultType="memberDto" parameterType="String">
+		SELECT * FROM member WHERE member_id = #{memberId}
 	</select>
 	
 	<!-- Update member -->
