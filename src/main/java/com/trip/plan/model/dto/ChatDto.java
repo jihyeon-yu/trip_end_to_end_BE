@@ -16,6 +16,8 @@ public class ChatDto {
 		JOIN, SEND, LEAVE
 	}
 	private String nickname;
+	private String image;
 	private String content;
 	private MessageType type;
+	private int colorIdx;
 }
