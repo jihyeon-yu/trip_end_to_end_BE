@@ -11,11 +11,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.multipart.MultipartFile;
 
 import com.trip.member.model.dto.MemberChangePasswordDto;
 import com.trip.member.model.dto.MemberDto;
+import com.trip.member.model.dto.MemberFileInfoDto;
 import com.trip.member.model.dto.MemberLoginRequestDto;
 import com.trip.member.model.service.MemberService;
 import com.trip.security.TokenDto;
@@ -28,9 +30,16 @@ public class MemberRestController {
 	private MemberService memberService;
 
 	@PostMapping("/signup")
-	public ResponseEntity<String> signup(@RequestBody MemberDto memberDto) {
+	public ResponseEntity<String> signup(@RequestPart(name="signupMember") MemberDto memberDto,
+			@RequestPart(name="image", required = false) MultipartFile file) {
 		System.out.println(memberDto);
-		boolean isRegistered = memberService.signup(memberDto);
+		System.out.println(file);
+		boolean isRegistered = false;
+		if (file != null) {
+			isRegistered = memberService.signup(memberDto, file);
+		} else {
+			isRegistered = memberService.signup(memberDto);
+		}
 		if (isRegistered) {
 			System.out.println("회원가입완료");
 			return ResponseEntity.ok("회원가입이 완료되었습니다.");
@@ -63,6 +72,9 @@ public class MemberRestController {
 	@GetMapping("/detail/{id}")
 	public ResponseEntity<MemberDto> detailMember(@PathVariable String id){
 		MemberDto memberDto = memberService.findById(id);
+		MemberFileInfoDto fileInfo = memberService.fileInfo(memberDto.getMemberId());
+		if (fileInfo instanceof MemberFileInfoDto)
+			memberDto.setImage(fileInfo.getSaveFile());
 		return ResponseEntity.ok(memberDto);
 		
 	}

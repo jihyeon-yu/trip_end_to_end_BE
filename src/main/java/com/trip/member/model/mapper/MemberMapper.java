@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.trip.member.model.dto.MemberDto;
+import com.trip.member.model.dto.MemberFileInfoDto;
 
 @Mapper
 public interface MemberMapper {
@@ -18,4 +19,6 @@ public interface MemberMapper {
 	void deleteMember(@Param("id") String id);
 	String getMemberIdById(String id);
 	
+	void registerFile(MemberFileInfoDto fileInfo);
+	MemberFileInfoDto fileInfo(String memberId);
 }

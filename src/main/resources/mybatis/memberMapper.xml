@@ -5,7 +5,7 @@
 <mapper namespace="com.trip.member.model.mapper.MemberMapper">
 
 	<!-- Insert a new member -->
-	<insert id="insertMember" parameterType="memberDto">
+	<insert id="insertMember" parameterType="memberDto" useGeneratedKeys="true" keyProperty="memberId">
 		INSERT INTO member
 		(id,password, name, birthdate, image, email_id,email_domain,
 		nickname,sex, area,phone_number, mbti)
@@ -56,4 +56,17 @@
 	<update id="deleteMember" parameterType="String">
 		UPDATE member SET is_active = 0 WHERE id = #{id}
 	</update>
+	
+	<!-- Register Profile Image -->
+	<insert id="registerFile" parameterType="memberFileInfoDto">
+		INSERT INTO member_file_info
+		(member_id, save_folder, original_file, save_file)
+		VALUES (#{memberId}, #{saveFolder}, #{originalFile}, #{saveFile})
+	</insert>
+	
+	<!-- Get Profile Image -->
+	<select id="fileInfo" parameterType="String" resultType="memberFileInfoDto">
+		SELECT * FROM member_file_info
+		WHERE member_id = #{memberId}
+	</select>
 </mapper>
