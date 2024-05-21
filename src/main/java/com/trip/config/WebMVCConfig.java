@@ -20,7 +20,7 @@ public class WebMVCConfig implements WebMvcConfigurer{
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler(uploadPath)
-                .addResourceLocations("file:"+resourcePath);
+                .addResourceLocations("file:///"+resourcePath);
     }
 	
 	@Bean
@@ -29,7 +29,7 @@ public class WebMVCConfig implements WebMvcConfigurer{
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/api/**")
-                        .allowedOriginPatterns("*")
+                        .allowedOrigins("http://localhost:5173")
                         .allowedMethods("GET", "POST", "PUT", "DELETE")
                         .allowedHeaders("*")
                         .allowCredentials(true);
