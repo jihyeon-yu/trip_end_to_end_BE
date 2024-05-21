@@ -34,4 +34,6 @@ public interface MemberService {
 	boolean deleteMember(String id);
 	
 	MemberFileInfoDto fileInfo(String memberId);
+	
+	MemberDto getMemberDtoByMemberId(String memberId);
 }
