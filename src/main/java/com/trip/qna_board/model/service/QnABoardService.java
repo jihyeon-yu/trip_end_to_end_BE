@@ -21,14 +21,18 @@ public interface QnABoardService {
 	void deleteArticle(String qnaBoardId);
 
 	void modifyArticle(QnABoardDto qnaBoardDto);
-	
+
+	void updateStateToAnswered(String qnaBoardId);
+
+	void updateStateToUnAnswered(String qnaBoardId);
+
 	/* comment */
 	void insertComment(QnACommentDto qnaCommentDto);
 
 	void deleteComment(String commentId);
 
 	void modifyComment(QnACommentDto qnaCommentDto);
-	
+
 	/* page navigation */
 	PageNavigation makePageNavigation(Map<String, String> map);
 }

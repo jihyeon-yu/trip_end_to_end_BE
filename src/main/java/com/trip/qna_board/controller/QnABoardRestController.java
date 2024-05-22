@@ -102,6 +102,7 @@ public class QnABoardRestController {
 	public ResponseEntity<?> insertComment(@RequestBody QnACommentDto qnaCommentDto) {
 		try {
 			qnaBoardService.insertComment(qnaCommentDto);
+			qnaBoardService.updateStateToAnswered(qnaCommentDto.getQnaBoardId());
 			return ResponseEntity.ok().body("{\"msg\":" + "댓글 등록이 완료되었습니다. }");
 		} catch (Exception e) {
 			return exceptionHandling(e);

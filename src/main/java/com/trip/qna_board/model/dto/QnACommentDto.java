@@ -15,6 +15,7 @@ public class QnACommentDto {
 	private String commentId;
 	private String qnaBoardId;
 	private String memberId;
+	private String nickname;
 	private String content;
 	private String depth;
 	private String commentGroup;

@@ -66,24 +66,37 @@
 		where qna_board_id =
 		#{qnaBoardId}
 	</update>
-
+	
 	<update id="updateStateToAnswered" parameterType="String">
 		update
 		qna_board
-		set isAnswered = 1
+		set is_answered = 1
+		where qna_board_id = #{qnaBoardId}
 	</update>
 
 	<update id="updateStateToUnAnswered" parameterType="String">
 		update
 		qna_board
-		set isAnswered = 0
+		set is_answered = 0
+		where qna_board_id = #{qnaBoardId}
 	</update>
 
 	<select id="listComment" parameterType="String"
 		resultType="qnaCommentDto">
-		select * from qna_comment
-		where qna_board_id
-		= #{qnaBoardId}
+		select qc.comment_id commentId,
+		qc.qna_board_id qnaBoardId,
+		qc.member_id memberId,
+		m.nickname nickname,
+		qc.content content,
+		qc.depth depth,
+		qc.comment_group commentGroup,
+		qc.deleted deleted,
+		qc.register_time registerTime
+		from qna_comment qc
+		left join member m on qc.member_id =
+		m.member_id
+		where qc.qna_board_id = #{qnaBoardId}
+		order by comment_id desc
 	</select>
 
 	<insert id="insertComment" parameterType="qnaCommentDto">
