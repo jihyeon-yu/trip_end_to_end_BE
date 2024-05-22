@@ -76,8 +76,9 @@ public class MemberRestController {
 
 	}
 
-	@PutMapping("/delete")
-	public ResponseEntity<String> delete(@RequestBody String id) {
+	@PutMapping("/delete/{id}")
+	public ResponseEntity<String> delete(@PathVariable String id) {
+		System.out.println(id);
 		boolean isDeleted = memberService.deleteMember(id);
 		if (isDeleted) {
 			return ResponseEntity.ok(id + " 삭제가 완료되었습니다.");

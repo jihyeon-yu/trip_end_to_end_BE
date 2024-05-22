@@ -39,6 +39,7 @@ public class PlanRestController {
 	public ResponseEntity<List<PlanDto>> getPlanListByMember(@PathVariable String id) {
 		String memberId = planService.getMemberIdById(id);
 		List<PlanDto> plan = planService.getPlanListByMember(memberId);
+		
 		return ResponseEntity.ok(plan);
 	}
 
