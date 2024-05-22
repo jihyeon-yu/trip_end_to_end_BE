@@ -1,9 +1,9 @@
 package com.trip.plan.model.service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -80,7 +80,14 @@ public class PlanServiceImpl implements PlanService {
 
 	@Override
 	public List<PlanDto> getAllPlanListByMember(String memberId) {
-		return planMapper.searchAllPlanList(memberId);
+		List<PlanDto> planList = planMapper.searchAllPlanList(memberId);
+		Collections.sort(planList, new Comparator<PlanDto>() {
+            @Override
+            public int compare(PlanDto o1, PlanDto o2) {
+                return o1.getStartDate().compareTo(o2.getStartDate());
+            }
+        });
+		return planList;
 	}
 	@Override
 	public PlanRequestDto getPlanDetailByPlanId(String planId) {
@@ -116,11 +123,9 @@ public class PlanServiceImpl implements PlanService {
 	public void updatePlan(PlanRequestDto planRequestDto) {
 		// plan 정보 수정
 		PlanDto planDto = planRequestDto.getPlanDto();
-		System.out.println(planDto);
 		planMapper.updatePlan(planDto);
 		// 예약 내역 수정
 		List<BookGroupDto> bookGroupDtoList = planRequestDto.getBookContents();
-		System.out.println(bookGroupDtoList);
 		for (BookGroupDto bookGroupDto : bookGroupDtoList) {
 			planMapper.updateBookDetail(bookGroupDto);
 		}
