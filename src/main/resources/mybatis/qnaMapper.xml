@@ -6,24 +6,29 @@
 	namespace="com.trip.qna_board.model.mapper.QnABoardMapper">
 	<select id="listArticle" parameterType="map"
 		resultType="qnaBoardListItemDto">
-		select 
-		b.qna_board_id qnaBoardId, 
+		select
+		b.qna_board_id qnaBoardId,
 		b.member_id memberId,
-		b.hit hit, 
+		b.hit
+		hit,
 		b.subject subject,
-		b.content content, 
-		b.register_time registerTime, 
-		b.secret secret, 
+		b.content content,
+		b.register_time registerTime,
+		b.secret secret,
 		b.password password,
-		b.is_answered isAnswered, 
-		case when m.is_active = 1
-		then m.nickname 
+		b.is_answered isAnswered,
+		case when
+		m.is_active = 1
+		then m.nickname
 		else '(탈퇴한 회원)' end as nickname
-		from qna_board b
-		left join member m 
+		from
+		qna_board b
+		left join member m
 		on b.member_id = m.member_id
-		order by b.qna_board_id desc
-		limit #{start}, #{listsize}
+		order by
+		b.qna_board_id desc
+		limit #{start},
+		#{listsize}
 	</select>
 
 	<select id="detailArticleById" parameterType="String"
@@ -60,13 +65,18 @@
 	</delete>
 
 	<update id="modifyArticle" parameterType="qnaBoardDto">
-		update qna_board
-		set
-		subject = #{subject}, content = #{content}
-		where qna_board_id =
-		#{qnaBoardId}
+		UPDATE qna_board
+		SET
+		subject = #{subject},
+		content = #{content},
+		secret = #{secret},
+		password = CASE
+		WHEN #{secret} = 0 THEN NULL
+		ELSE #{password}
+		END
+		WHERE qna_board_id = #{qnaBoardId}
 	</update>
-	
+
 	<update id="updateStateToAnswered" parameterType="String">
 		update
 		qna_board
@@ -88,15 +98,18 @@
 		qc.member_id memberId,
 		m.nickname nickname,
 		qc.content content,
-		qc.depth depth,
+		qc.depth
+		depth,
 		qc.comment_group commentGroup,
 		qc.deleted deleted,
 		qc.register_time registerTime
 		from qna_comment qc
-		left join member m on qc.member_id =
+		left join member m on
+		qc.member_id =
 		m.member_id
 		where qc.qna_board_id = #{qnaBoardId}
-		order by comment_id desc
+		order by
+		comment_id desc
 	</select>
 
 	<insert id="insertComment" parameterType="qnaCommentDto">

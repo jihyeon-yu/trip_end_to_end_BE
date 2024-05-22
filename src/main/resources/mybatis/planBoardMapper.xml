@@ -118,9 +118,7 @@
 		#{commentGroup})
 	</insert>
 	<update id="deleteComment" parameterType="String">
-		update plan_comment
-		set
-		deleted = 1
+		delete from plan_comment
 		where comment_id = #{commentId}
 	</update>
 	<update id="modifyComment" parameterType="planCommentDto">

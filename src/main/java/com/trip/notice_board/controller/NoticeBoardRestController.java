@@ -67,7 +67,6 @@ public class NoticeBoardRestController {
 	@PostMapping("/insert")
 	public ResponseEntity<?> insertArticle(@RequestBody NoticeBoardDto noticeBoard) {
 		try {
-			System.out.println(noticeBoard);
 			noticeBoardService.insertArticle(noticeBoard);
 			return ResponseEntity.ok().body("{\"msg\" : 공지사항 등록이 완료되었습니다. }");
 		} catch (Exception e) {
@@ -78,7 +77,6 @@ public class NoticeBoardRestController {
 	@PutMapping("/{noticeId}")
 	public ResponseEntity<?> modifyArticle(@PathVariable String noticeId, @RequestBody NoticeBoardDto noticeBoard) {
 		try {
-			System.out.println(noticeBoard);
 			noticeBoardService.modifyArticle(noticeBoard);
 			return ResponseEntity.ok().body("{\"msg\" : 공지사항 수정이 완료되었습니다. }");
 		} catch (Exception e) {
