@@ -29,6 +29,8 @@ public interface PlanBoardService {
 
 	void deleteArticle(String planBoardId);
 
+	void modifyArticle(PlanBoardFormDto planBoardFormDto, MultipartFile file);
+	
 	void modifyArticle(PlanBoardFormDto planBoardFormDto);
 
 	void updateHit(String planBoardId);

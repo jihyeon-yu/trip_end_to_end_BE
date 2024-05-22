@@ -57,6 +57,17 @@
 		member_id =
 		#{memberId}
 	</select>
+	
+	<select id="searchAllPlanList" parameterType="String" resultType="planDto">
+		SELECT p.plan_id planId,
+		pg.member_id memberId,
+		p.title title,
+		p.start_date startDate,
+		p.end_date endDate
+		FROM plan p
+		LEFT JOIN plan_group pg ON p.plan_id = pg.plan_id
+		where pg.member_id = #{memberId};
+	</select>
 
 	<select id="searchPlanByPlanId" parameterType="String"
 		resultType="planDto">

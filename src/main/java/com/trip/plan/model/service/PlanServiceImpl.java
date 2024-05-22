@@ -79,6 +79,10 @@ public class PlanServiceImpl implements PlanService {
 	}
 
 	@Override
+	public List<PlanDto> getAllPlanListByMember(String memberId) {
+		return planMapper.searchAllPlanList(memberId);
+	}
+	@Override
 	public PlanRequestDto getPlanDetailByPlanId(String planId) {
 		PlanRequestDto plan = new PlanRequestDto();
 		PlanDto planDto = planMapper.searchPlanByPlanId(planId);

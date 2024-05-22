@@ -42,6 +42,13 @@ public class PlanRestController {
 		return ResponseEntity.ok(plan);
 	}
 
+	@GetMapping("/list/all/{id}")
+	public ResponseEntity<List<PlanDto>> getAllPlanListByMember(@PathVariable String id) {
+		String memberId = planService.getMemberIdById(id);
+		List<PlanDto> plan = planService.getAllPlanListByMember(memberId);
+		return ResponseEntity.ok(plan);
+	}
+
 	@GetMapping("/detail/{planId}")
 	public ResponseEntity<PlanRequestDto> getPlanDetailByMember(@PathVariable String planId) {
 		PlanRequestDto plan = planService.getPlanDetailByPlanId(planId);
@@ -53,7 +60,7 @@ public class PlanRestController {
 		planService.deletePlan(planId);
 		return ResponseEntity.ok("삭제가 완료되었습니다.");
 	}
-	
+
 	@PutMapping("/update/{planId}")
 	public ResponseEntity<String> updatePlan(@PathVariable String planId, @RequestBody PlanRequestDto planRequestDto) {
 		System.out.println(planRequestDto);
@@ -62,17 +69,15 @@ public class PlanRestController {
 		planService.createPlan(planRequestDto);
 		return ResponseEntity.ok("수정이 완료되었습니다.");
 	}
-	
+
 	@GetMapping("/getMember/{memberId}")
 	public ResponseEntity<MemberDto> getNicknameById(@PathVariable String memberId) {
 		MemberDto memberDto = memberService.getMemberDtoByMemberId(memberId);
 		MemberFileInfoDto fileInfo = memberService.fileInfo(memberDto.getMemberId());
 		System.out.println(fileInfo);
-        if (fileInfo instanceof MemberFileInfoDto)
-            memberDto.setImage(fileInfo.getSaveFile());
+		if (fileInfo instanceof MemberFileInfoDto)
+			memberDto.setImage(fileInfo.getSaveFile());
 		return ResponseEntity.ok(memberDto);
 	}
-	
-	
 
 }

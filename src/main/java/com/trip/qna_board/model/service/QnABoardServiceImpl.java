@@ -32,14 +32,35 @@ public class QnABoardServiceImpl implements QnABoardService {
 		int start = pgNo * SizeConstant.LIST_SIZE - SizeConstant.LIST_SIZE;
 		param.put("start", start);
 		param.put("listsize", SizeConstant.LIST_SIZE);
-		return qnaBoardMapper.listArticle(param);
+		List<QnABoardListItemDto> list = qnaBoardMapper.listArticle(param);
+		for (QnABoardListItemDto article : list) {
+			List<QnACommentDto> commentList = qnaBoardMapper.listComment(article.getQnaBoardId());
+			if (commentList.size() == 0) {
+				qnaBoardMapper.updateStateToUnAnswered(article.getQnaBoardId());
+				article.setIsAnswered("0");
+			}
+			else {
+				qnaBoardMapper.updateStateToAnswered(article.getQnaBoardId());
+				article.setIsAnswered("1");
+			}
+		}
+		return list;
 	}
 
 	@Override
 	public QnABoardDetailDto detailArticleById(String qnaBoardId) {
 		QnABoardDetailDto qnaBoardDetailDto = new QnABoardDetailDto();
 		qnaBoardDetailDto.setQnaBoardDto(qnaBoardMapper.detailArticleById(qnaBoardId));
-		qnaBoardDetailDto.setCommentList(qnaBoardMapper.listComment(qnaBoardId));
+		List<QnACommentDto> commentList = qnaBoardMapper.listComment(qnaBoardId);
+		if (commentList.size() == 0) {
+			qnaBoardMapper.updateStateToUnAnswered(qnaBoardDetailDto.getQnaBoardDto().getQnaBoardId());
+			qnaBoardDetailDto.getQnaBoardDto().setIsAnswered("0");
+		}
+		else {
+			qnaBoardMapper.updateStateToAnswered(qnaBoardDetailDto.getQnaBoardDto().getQnaBoardId());
+			qnaBoardDetailDto.getQnaBoardDto().setIsAnswered("1");
+		}
+		qnaBoardDetailDto.setCommentList(commentList);
 		return qnaBoardDetailDto;
 	}
 
@@ -102,9 +123,18 @@ public class QnABoardServiceImpl implements QnABoardService {
 		pageNavigation.setStartRange(startRange);
 		boolean endRange = (totalPageCount - 1) / naviSize * naviSize < currentPage;
 		pageNavigation.setEndRange(endRange);
-		pageNavigation.makeNavigator();
 
 		return pageNavigation;
+	}
+
+	@Override
+	public void updateStateToAnswered(String qnaBoardId) {
+		qnaBoardMapper.updateStateToAnswered(qnaBoardId);
+	}
+
+	@Override
+	public void updateStateToUnAnswered(String qnaBoardId) {
+		qnaBoardMapper.updateStateToUnAnswered(qnaBoardId);
 	}
 
 	

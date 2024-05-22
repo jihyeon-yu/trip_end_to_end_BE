@@ -120,6 +120,35 @@ public class PlanBoardServiceImpl implements PlanBoardService {
 	}
 
 	@Override
+	public void modifyArticle(PlanBoardFormDto planBoardFormDto, MultipartFile file) {
+		planBoardMapper.modifyArticle(planBoardFormDto.getPlanBoard());
+		try {
+			Path uploadPath = Paths.get(uploadDir);
+			if (!Files.exists(uploadPath)) {
+				Files.createDirectories(uploadPath);
+			}
+			String fileName = generateImageUrl(file);
+			PlanBoardFileInfoDto fileInfoDto = new PlanBoardFileInfoDto();
+			fileInfoDto.setPlanBoardId(planBoardFormDto.getPlanBoard().getPlanBoardId());
+			fileInfoDto.setSaveFolder(uploadDir);
+			fileInfoDto.setOriginalFile(file.getOriginalFilename());
+			fileInfoDto.setSaveFile(fileName);
+			PlanBoardFileInfoDto isExisted = planBoardMapper.fileInfo(planBoardFormDto.getPlanBoard().getPlanBoardId());
+			if (isExisted instanceof PlanBoardFileInfoDto)
+				planBoardMapper.updateFile(fileInfoDto);
+			else
+				planBoardMapper.registerFile(fileInfoDto);
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+		planBoardMapper.deleteTag(planBoardFormDto.getPlanBoard().getPlanBoardId());
+		for (PlanBoardTagDto tag : planBoardFormDto.getTagList()) {
+			tag.setPlanBoardId(planBoardFormDto.getPlanBoard().getPlanBoardId());
+			planBoardMapper.insertTag(tag);
+		}
+	}
+	
+	@Override
 	public void modifyArticle(PlanBoardFormDto planBoardFormDto) {
 		planBoardMapper.modifyArticle(planBoardFormDto.getPlanBoard());
 		planBoardMapper.deleteTag(planBoardFormDto.getPlanBoard().getPlanBoardId());

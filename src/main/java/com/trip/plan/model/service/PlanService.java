@@ -8,6 +8,7 @@ import com.trip.plan.model.dto.PlanRequestDto;
 public interface PlanService {
 	void createPlan(PlanRequestDto planRequestDto);
 	List<PlanDto> getPlanListByMember(String memberId);
+	List<PlanDto> getAllPlanListByMember(String memberId);
 	PlanRequestDto getPlanDetailByPlanId(String planId);
 	void updatePlan(PlanRequestDto planRequestDto);
 	void deletePlan(String planId);
