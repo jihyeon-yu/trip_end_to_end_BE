@@ -16,6 +16,7 @@ public class PlanCommentDto {
 	private String planBoardId;
 	private String memberId;
 	private String nickname;
+	private String image;
 	private String content;
 	private String depth;
 	private String commentGroup;

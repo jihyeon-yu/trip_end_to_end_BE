@@ -6,15 +6,44 @@
 	namespace="com.trip.plan_board.model.mapper.PlanBoardMapper">
 
 	<select id="listArticle" resultType="planBoardDto">
-		select *
-		from plan_board
+		select  
+		pb.plan_board_id planBoardId,
+		pb.plan_id planId,
+		pb.member_id memberId,
+		m.nickname nickname,
+		m.image image,
+		pb.subject subject,
+		pb.content content,
+		pb.start_date startDate,
+		pb.end_date endDate,
+		pb.the_number_of_members theNumberOfMembers,
+		pb.register_time registerTime,
+		pb.thumbnail thumbnail,
+		pb.hit hit
+		from plan_board pb
+		left join member m on pb.member_id = m.member_id
+		order by pb.plan_board_id desc
 	</select>
 
 	<select id="detailArticleById" parameterType="String"
 		resultType="planBoardDto">
-		select * from plan_board
-		where plan_board_id =
-		#{plan_board_id}
+		select  
+		pb.plan_board_id planBoardId,
+		pb.plan_id planId,
+		pb.member_id memberId,
+		m.nickname nickname,
+		m.image image,
+		pb.subject subject,
+		pb.content content,
+		pb.start_date startDate,
+		pb.end_date endDate,
+		pb.the_number_of_members theNumberOfMembers,
+		pb.register_time registerTime,
+		pb.thumbnail thumbnail,
+		pb.hit hit
+		from plan_board pb
+		left join member m on pb.member_id = m.member_id
+		where pb.plan_board_id = #{plan_board_id}
 	</select>
 
 	<select id="listTagById" parameterType="String"
@@ -36,6 +65,7 @@
 		pc.plan_board_id planBoardId,
 		pc.member_id memberId,
 		m.nickname nickname,
+		m.image image,
 		pc.content content,
 		pc.depth depth,
 		pc.comment_group commentGroup,
@@ -56,13 +86,13 @@
 	</select>
 
 	<insert id="insertArticle" parameterType="planBoardDto" useGeneratedKeys="true" keyProperty="planBoardId">
-		insert into plan_board (member_id, subject, content, start_date,
+		insert into plan_board (plan_id, member_id, subject, content, start_date,
 		end_date, the_number_of_members
 		<if test="thumbnail != null and thumbnail != '' ">
 			, thumbnail
 		</if>
 		)
-		values (#{memberId}, #{subject}, #{content}, #{startDate},
+		values (#{planId}, #{memberId}, #{subject}, #{content}, #{startDate},
 		#{endDate}, #{theNumberOfMembers}
 		<if test="thumbnail != null and thumbnail != ''">
 			, #{thumbnail}

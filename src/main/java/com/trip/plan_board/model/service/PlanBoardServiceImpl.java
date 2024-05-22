@@ -9,10 +9,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.trip.member.model.dto.MemberFileInfoDto;
+import com.trip.member.model.mapper.MemberMapper;
 import com.trip.plan_board.model.dto.AttractionDescriptionDto;
 import com.trip.plan_board.model.dto.AttractionInfoDto;
 import com.trip.plan_board.model.dto.PlanBoardFileInfoDto;
@@ -29,18 +32,27 @@ import com.trip.plan_board.model.mapper.PlanBoardMapper;
 
 @Service
 public class PlanBoardServiceImpl implements PlanBoardService {
+	@Autowired
 	private PlanBoardMapper planBoardMapper;
-
+	@Autowired
+	private MemberMapper memberMapper;
 	@Value("${upload.dir}") // application.properties에 저장된 파일 업로드 디렉토리 경로
 	private String uploadDir;
 
-	public PlanBoardServiceImpl(PlanBoardMapper planBoardMapper) {
+	public PlanBoardServiceImpl(PlanBoardMapper planBoardMapper, MemberMapper memberMapper) {
 		super();
 		this.planBoardMapper = planBoardMapper;
+		this.memberMapper = memberMapper;
 	}
 
 	@Override
 	public List<PlanBoardDto> listArticle() {
+		List<PlanBoardDto> list = planBoardMapper.listArticle();
+		for (PlanBoardDto planBoardDto : list) {
+			MemberFileInfoDto fileInfo = memberMapper.fileInfo(planBoardDto.getMemberId());
+			if (fileInfo instanceof MemberFileInfoDto)
+				planBoardDto.setImage(fileInfo.getSaveFile());
+		}
 		return planBoardMapper.listArticle();
 	}
 
@@ -51,6 +63,11 @@ public class PlanBoardServiceImpl implements PlanBoardService {
 		planBoardDetailDto.setCommentList(planBoardMapper.listCommentById(planBoardId));
 		planBoardDetailDto.setTagList(planBoardMapper.listTagById(planBoardId));
 		planBoardDetailDto.setLikeList(planBoardMapper.listLikeById(planBoardId));
+		
+		// 작성자 프로필 이미지 가져오기
+		MemberFileInfoDto fileInfo = memberMapper.fileInfo(planBoardDetailDto.getPlanBoard().getMemberId());
+		if (fileInfo instanceof MemberFileInfoDto)
+			planBoardDetailDto.getPlanBoard().setImage(fileInfo.getSaveFile());
 		return planBoardDetailDto;
 	}
 

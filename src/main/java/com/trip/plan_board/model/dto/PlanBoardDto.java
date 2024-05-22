@@ -13,7 +13,10 @@ import lombok.ToString;
 @ToString
 public class PlanBoardDto {
 	private String planBoardId;
+	private String planId;
 	private String memberId;
+	private String nickname;
+	private String image;
 	private String subject;
 	private String content;
 	private String startDate;
