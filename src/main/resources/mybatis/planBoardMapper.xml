@@ -44,9 +44,8 @@
 		from plan_comment pc
 		left join member m on pc.member_id =
 		m.member_id
-		where plan_board_id = #{plan_board_id}
-		order by comment_id
-		desc
+		where pc.plan_board_id = #{planBoardId}
+		order by comment_id desc
 	</select>
 
 	<select id="listLikeById" parameterType="String"
