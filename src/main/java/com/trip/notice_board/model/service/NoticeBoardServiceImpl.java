@@ -81,7 +81,7 @@ public class NoticeBoardServiceImpl implements NoticeBoardService {
 		pageNavigation.setStartRange(startRange);
 		boolean endRange = (totalPageCount - 1) / naviSize * naviSize < currentPage;
 		pageNavigation.setEndRange(endRange);
-		pageNavigation.makeNavigator();
+
 		return pageNavigation;
 	}
 }
