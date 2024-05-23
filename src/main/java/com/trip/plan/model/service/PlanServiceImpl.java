@@ -40,21 +40,21 @@ public class PlanServiceImpl implements PlanService {
 		}
 		// 여행 기간별 일자 추가
 		if (planRequestDto.getScheduleDates().size() != 0) {
-		    // 각 날짜에 대한 새로운 planScheduleId를 생성
-			
-		    for (int i=0; i < planRequestDto.getScheduleDates().size(); i++) {
-		    	PlanScheduleDto planScheduleDto = planRequestDto.getScheduleDates().get(i);
-		        planScheduleDto.setPlanId(planId);
-		        planMapper.insertPlanSchedule(planScheduleDto);
-		        
+			// 각 날짜에 대한 새로운 planScheduleId를 생성
+
+			for (int i = 0; i < planRequestDto.getScheduleDates().size(); i++) {
+				PlanScheduleDto planScheduleDto = planRequestDto.getScheduleDates().get(i);
+				planScheduleDto.setPlanId(planId);
+				planMapper.insertPlanSchedule(planScheduleDto);
+
 				// 일자별 방문 장소 추가
 				if (planRequestDto.getPlanLocations().get(i).size() != 0) {
-			        for (PlanLocationDto planLocation : planRequestDto.getPlanLocations().get(i)) {
-			        	planLocation.setPlanScheduleId(planMapper.searchLastPlanScheduleId());
-			            planMapper.insertPlanLocation(planLocation);
-			        }
+					for (PlanLocationDto planLocation : planRequestDto.getPlanLocations().get(i)) {
+						planLocation.setPlanScheduleId(planMapper.searchLastPlanScheduleId());
+						planMapper.insertPlanLocation(planLocation);
+					}
 				}
-		    }
+			}
 		}
 
 		// 예약 내역 추가
@@ -82,13 +82,14 @@ public class PlanServiceImpl implements PlanService {
 	public List<PlanDto> getAllPlanListByMember(String memberId) {
 		List<PlanDto> planList = planMapper.searchAllPlanList(memberId);
 		Collections.sort(planList, new Comparator<PlanDto>() {
-            @Override
-            public int compare(PlanDto o1, PlanDto o2) {
-                return o1.getStartDate().compareTo(o2.getStartDate());
-            }
-        });
+			@Override
+			public int compare(PlanDto o1, PlanDto o2) {
+				return o1.getStartDate().compareTo(o2.getStartDate());
+			}
+		});
 		return planList;
 	}
+
 	@Override
 	public PlanRequestDto getPlanDetailByPlanId(String planId) {
 		PlanRequestDto plan = new PlanRequestDto();
@@ -106,7 +107,14 @@ public class PlanServiceImpl implements PlanService {
 		List<List<PlanLocationDto>> location = new ArrayList<>();
 		for (PlanScheduleDto planScheduleDto : planSchedule) {
 			String planScheduleId = planScheduleDto.getPlanScheduleId();
-			location.add(planMapper.searchPlanLocation(planScheduleId));
+			List<PlanLocationDto> locationList = planMapper.searchPlanLocation(planScheduleId);
+			Collections.sort(locationList, new Comparator<PlanLocationDto>() {
+				@Override
+				public int compare(PlanLocationDto o1, PlanLocationDto o2) {
+					return o1.getTime().compareTo(o2.getTime());
+				}
+			});
+			location.add(locationList);
 		}
 		plan.setPlanLocations(location);
 		// 결제 내역 조회
@@ -147,7 +155,5 @@ public class PlanServiceImpl implements PlanService {
 	public String getMemberIdById(String id) {
 		return memberMapper.getMemberIdById(id);
 	}
-
- 
 
 }
