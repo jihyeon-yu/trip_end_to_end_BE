@@ -48,7 +48,6 @@ public class LandmarkDetectionController {
         try (ImageAnnotatorClient client = ImageAnnotatorClient.create()) {
             BatchAnnotateImagesResponse response = client.batchAnnotateImages(requests);
             List<AnnotateImageResponse> responses = response.getResponsesList();
-            System.out.println(responses);
 
             for (AnnotateImageResponse res : responses) {
                 if (res.hasError()) {
