@@ -52,9 +52,10 @@ public class PlanBoardServiceImpl implements PlanBoardService {
 			MemberFileInfoDto fileInfo = memberMapper.fileInfo(planBoardDto.getMemberId());
 			if (fileInfo instanceof MemberFileInfoDto)
 				planBoardDto.setImage(fileInfo.getSaveFile());
+			int likeCnt = planBoardMapper.listLikeById(planBoardDto.getPlanBoardId()).size();
+			planBoardDto.setLikeCnt(likeCnt) ;
 		}
-		System.out.println("@@" + list);
-		return planBoardMapper.listArticle();
+		return list;
 	}
 
 	@Override
