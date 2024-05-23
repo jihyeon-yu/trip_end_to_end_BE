@@ -68,7 +68,10 @@ public class MemberRestController {
 
 	@GetMapping("/detail/{id}")
 	public ResponseEntity<MemberDto> detailMember(@PathVariable String id) {
+		System.out.println(id);
+		
 		MemberDto memberDto = memberService.findById(id);
+		System.out.println(memberDto);
 		MemberFileInfoDto fileInfo = memberService.fileInfo(memberDto.getMemberId());
 		if (fileInfo instanceof MemberFileInfoDto)
 			memberDto.setImage(fileInfo.getSaveFile());
