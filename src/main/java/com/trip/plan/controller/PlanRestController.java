@@ -64,8 +64,6 @@ public class PlanRestController {
 
 	@PutMapping("/update/{planId}")
 	public ResponseEntity<String> updatePlan(@PathVariable String planId, @RequestBody PlanRequestDto planRequestDto) {
-		System.out.println(planRequestDto);
-		System.out.println(planId);
 		planService.deletePlan(planId);
 		planService.createPlan(planRequestDto);
 		return ResponseEntity.ok("수정이 완료되었습니다.");
@@ -75,7 +73,6 @@ public class PlanRestController {
 	public ResponseEntity<MemberDto> getNicknameById(@PathVariable String memberId) {
 		MemberDto memberDto = memberService.getMemberDtoByMemberId(memberId);
 		MemberFileInfoDto fileInfo = memberService.fileInfo(memberDto.getMemberId());
-		System.out.println(fileInfo);
 		if (fileInfo instanceof MemberFileInfoDto)
 			memberDto.setImage(fileInfo.getSaveFile());
 		return ResponseEntity.ok(memberDto);
