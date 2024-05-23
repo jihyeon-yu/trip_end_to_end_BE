@@ -53,6 +53,7 @@ public class PlanBoardServiceImpl implements PlanBoardService {
 			if (fileInfo instanceof MemberFileInfoDto)
 				planBoardDto.setImage(fileInfo.getSaveFile());
 		}
+		System.out.println("@@" + list);
 		return planBoardMapper.listArticle();
 	}
 
@@ -73,7 +74,7 @@ public class PlanBoardServiceImpl implements PlanBoardService {
 		for (PlanCommentDto comment : planBoardDetailDto.getCommentList()) {
 			fileInfo = memberMapper.fileInfo(comment.getMemberId());
 			if (fileInfo instanceof MemberFileInfoDto)
-				comment.setImage(fileInfo.getSaveFile());
+				comment.setImage(fileInfo.getSaveFile());	
 		}
 		return planBoardDetailDto;
 	}
