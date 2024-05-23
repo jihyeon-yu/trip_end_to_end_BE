@@ -68,6 +68,13 @@ public class PlanBoardServiceImpl implements PlanBoardService {
 		MemberFileInfoDto fileInfo = memberMapper.fileInfo(planBoardDetailDto.getPlanBoard().getMemberId());
 		if (fileInfo instanceof MemberFileInfoDto)
 			planBoardDetailDto.getPlanBoard().setImage(fileInfo.getSaveFile());
+		
+		// 댓글 작성자 프로필 이미지 가져오기
+		for (PlanCommentDto comment : planBoardDetailDto.getCommentList()) {
+			fileInfo = memberMapper.fileInfo(comment.getMemberId());
+			if (fileInfo instanceof MemberFileInfoDto)
+				comment.setImage(fileInfo.getSaveFile());
+		}
 		return planBoardDetailDto;
 	}
 
