@@ -1,6 +1,19 @@
-## Trip-End-To-End
+## 💻  프로젝트 명
+Trip-End-To-End
 
-개인 맞춤 정보를 활용하여 여행 계획을 세우고 후기까지 작성할 수 있는 여행 계획 웹 사이트
+## 📄  프로젝트 소개
+Trip-End-To-End는 사용자가 개인 맞춤 정보를 활용하여 여행 계획을 세우고, 여행 후기를 작성 및 공유할 수 있는 여행 계획 웹 사이트입니다. 이 플랫폼은 사용자가 여행 일정을 보다 효율적으로 관리하고, 여행지에서의 경험을 다른 사용자와 나눌 수 있도록 돕습니다.
+
+## 환경 설정
+
+- google cloud vision api
+- application.properties
+- dbvalue.properties
+- mysql
+- sts
+
+- [vue.js 바로가기](https://github.com/zpqmdh/trip_end_to_end_FE.git)
+- [챗봇 바로가기](https://github.com/jihyeon-yu/openai_chatbot.git)
 
 ## 주요 기능
 
