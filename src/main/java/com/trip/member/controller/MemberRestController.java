@@ -89,6 +89,8 @@ public class MemberRestController {
 	public ResponseEntity<String> updateMember(@PathVariable String id,
 			@RequestPart(name = "updateMember") MemberDto memberDto,
 			@RequestPart(name = "image", required = false) MultipartFile file) {
+		System.out.println(memberDto);
+		System.out.println(file);
 		memberDto.setId(id);
 		boolean isUpdated = false;
 		if (file != null) {

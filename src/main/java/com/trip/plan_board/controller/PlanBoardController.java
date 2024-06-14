@@ -213,52 +213,6 @@ public class PlanBoardController {
 		}
 	}
 
-	/* map */
-	@GetMapping("/map/sido")
-	public ResponseEntity<?> getSido() {
-		try {
-			List<SidoDto> list = planBoardService.getSidoList();
-			ObjectMapper objectMapper = new ObjectMapper();
-			return ResponseEntity.ok().body("{\"sidoList\":" + objectMapper.writeValueAsString(list) + "}");
-		} catch (Exception e) {
-			return exceptionHandling(e);
-		}
-	}
-
-	@GetMapping("/map/gugun/{sidoCode}")
-	public ResponseEntity<?> getGugun(@PathVariable String sidoCode) {
-		try {
-			List<GugunDto> list = planBoardService.getGugunList(sidoCode);
-			ObjectMapper objectMapper = new ObjectMapper();
-			return ResponseEntity.ok().body("{\"gugunList\":" + objectMapper.writeValueAsString(list) + "}");
-		} catch (Exception e) {
-			return exceptionHandling(e);
-		}
-	}
-
-	@GetMapping("/map/attractioninfo")
-	public ResponseEntity<?> attractionInfo(@RequestParam Map<String, String> map) {
-		try {
-			List<AttractionInfoDto> list = planBoardService.getAttractionInfoList(map);
-			ObjectMapper objectMapper = new ObjectMapper();
-			return ResponseEntity.ok().body("{\"attractionInfoList\":" + objectMapper.writeValueAsString(list) + "}");
-		} catch (Exception e) {
-			return exceptionHandling(e);
-		}
-
-	}
-
-	@GetMapping("/map/attractiondescription/{contentId}")
-	public ResponseEntity<?> attractionDescription(@PathVariable String contentId) {
-		try {
-			AttractionDescriptionDto description = planBoardService.getAttractionDescription(contentId);
-			ObjectMapper objectMapper = new ObjectMapper();
-			return ResponseEntity.ok().body(objectMapper.writeValueAsString(description));
-		} catch (Exception e) {
-			return exceptionHandling(e);
-		}
-	}
-
 	private ResponseEntity<?> exceptionHandling(Exception e) {
 		e.printStackTrace();
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error : " + e.getMessage());

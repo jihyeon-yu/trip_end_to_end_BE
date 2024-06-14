@@ -1,4 +1,4 @@
-package com.trip.ai.vision;
+package com.trip.ai.landmark.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
