@@ -1,4 +1,4 @@
-package com.trip.ai.vision;
+package com.trip.ai.landmark.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,6 +20,7 @@ import com.google.cloud.vision.v1.ImageAnnotatorClient;
 import com.google.cloud.vision.v1.ImageContext;
 import com.google.cloud.vision.v1.ImageContext.Builder;
 import com.google.protobuf.ByteString;
+import com.trip.ai.landmark.model.dto.Landmark;
 
 @RestController
 @RequestMapping(value = "/api", produces = "application/json; charset=utf8")
