@@ -1,21 +1,16 @@
 package com.trip.plan_board.model.service;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.trip.member.model.dto.MemberFileInfoDto;
-import com.trip.member.model.mapper.MemberMapper;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.trip.plan_board.model.dto.AttractionDescriptionDto;
 import com.trip.plan_board.model.dto.AttractionInfoDto;
 import com.trip.plan_board.model.dto.PlanBoardFileInfoDto;
@@ -35,23 +30,21 @@ public class PlanBoardServiceImpl implements PlanBoardService {
 	@Autowired
 	private PlanBoardMapper planBoardMapper;
 	@Autowired
-	private MemberMapper memberMapper;
-	@Value("${upload.dir}") // application.properties에 저장된 파일 업로드 디렉토리 경로
-	private String uploadDir;
+    private AmazonS3 s3Client;
+    @Value("${aws.s3.bucketName}")
+    private String bucketName;
 
-	public PlanBoardServiceImpl(PlanBoardMapper planBoardMapper, MemberMapper memberMapper) {
+	public PlanBoardServiceImpl(PlanBoardMapper planBoardMapper) {
 		super();
 		this.planBoardMapper = planBoardMapper;
-		this.memberMapper = memberMapper;
 	}
 
 	@Override
 	public List<PlanBoardDto> listArticle() {
 		List<PlanBoardDto> list = planBoardMapper.listArticle();
 		for (PlanBoardDto planBoardDto : list) {
-			MemberFileInfoDto fileInfo = memberMapper.fileInfo(planBoardDto.getMemberId());
-			if (fileInfo instanceof MemberFileInfoDto)
-				planBoardDto.setImage(fileInfo.getSaveFile());
+			int likeCnt = planBoardMapper.listLikeById(planBoardDto.getPlanBoardId()).size();
+			planBoardDto.setLikeCnt(likeCnt) ;
 		}
 		return planBoardMapper.listArticle();
 	}
@@ -63,18 +56,7 @@ public class PlanBoardServiceImpl implements PlanBoardService {
 		planBoardDetailDto.setCommentList(planBoardMapper.listCommentById(planBoardId));
 		planBoardDetailDto.setTagList(planBoardMapper.listTagById(planBoardId));
 		planBoardDetailDto.setLikeList(planBoardMapper.listLikeById(planBoardId));
-		
-		// 작성자 프로필 이미지 가져오기
-		MemberFileInfoDto fileInfo = memberMapper.fileInfo(planBoardDetailDto.getPlanBoard().getMemberId());
-		if (fileInfo instanceof MemberFileInfoDto)
-			planBoardDetailDto.getPlanBoard().setImage(fileInfo.getSaveFile());
-		
-		// 댓글 작성자 프로필 이미지 가져오기
-		for (PlanCommentDto comment : planBoardDetailDto.getCommentList()) {
-			fileInfo = memberMapper.fileInfo(comment.getMemberId());
-			if (fileInfo instanceof MemberFileInfoDto)
-				comment.setImage(fileInfo.getSaveFile());
-		}
+
 		return planBoardDetailDto;
 	}
 
@@ -83,22 +65,13 @@ public class PlanBoardServiceImpl implements PlanBoardService {
 		try {
 			// 게시글 정보 업데이트
 			PlanBoardDto planBoard = planBoardFormDto.getPlanBoard();
-			planBoardMapper.insertArticle(planBoard);
 			String planBoardId = planBoard.getPlanBoardId();
-			String fileName = generateImageUrl(file);
-
+			
 			// 파일 업로드
-			Path uploadPath = Paths.get(uploadDir);
-			if (!Files.exists(uploadPath)) {
-				Files.createDirectories(uploadPath);
-			}
-			PlanBoardFileInfoDto fileInfoDto = new PlanBoardFileInfoDto();
-			fileInfoDto.setPlanBoardId(planBoardId);
-			fileInfoDto.setSaveFolder(uploadDir); // 파일을 저장할 경로
-			fileInfoDto.setOriginalFile(file.getOriginalFilename()); // 원래 파일 이름
-			fileInfoDto.setSaveFile(fileName); // 저장된 파일 이름 (plan_board의 thumbnail 필드 값)
-			planBoardMapper.registerFile(fileInfoDto); // 파일 정보를 데이터베이스에 저장
-
+			planBoard.setThumbnail(uploadFile(file));
+			
+			planBoardMapper.insertArticle(planBoard);
+			
 			// 태그 삽입
 			for (PlanBoardTagDto tag : planBoardFormDto.getTagList()) {
 				tag.setPlanBoardId(planBoardId);
@@ -109,7 +82,15 @@ public class PlanBoardServiceImpl implements PlanBoardService {
 		}
 
 	}
-
+	
+	public String uploadFile(MultipartFile file) throws IOException {
+        String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentLength(file.getSize());
+        s3Client.putObject(bucketName, fileName, file.getInputStream(), metadata);
+        return s3Client.getUrl(bucketName, fileName).toString();
+    }
+	
 	@Override
 	public void insertArticle(PlanBoardFormDto planBoardFormDto) {
 		// 게시글 정보 업데이트
@@ -124,15 +105,6 @@ public class PlanBoardServiceImpl implements PlanBoardService {
 		}
 	}
 
-	private String generateImageUrl(MultipartFile file) throws IOException {
-		if (file.isEmpty())
-			throw new IllegalArgumentException("File is Empty");
-		String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
-		File targetFile = new File(uploadDir, fileName);
-		file.transferTo(targetFile);
-		return fileName;
-	}
-
 	@Override
 	public PlanBoardFileInfoDto fileInfo(String planBoardId) {
 		return planBoardMapper.fileInfo(planBoardId);
@@ -145,26 +117,13 @@ public class PlanBoardServiceImpl implements PlanBoardService {
 
 	@Override
 	public void modifyArticle(PlanBoardFormDto planBoardFormDto, MultipartFile file) {
-		planBoardMapper.modifyArticle(planBoardFormDto.getPlanBoard());
 		try {
-			Path uploadPath = Paths.get(uploadDir);
-			if (!Files.exists(uploadPath)) {
-				Files.createDirectories(uploadPath);
-			}
-			String fileName = generateImageUrl(file);
-			PlanBoardFileInfoDto fileInfoDto = new PlanBoardFileInfoDto();
-			fileInfoDto.setPlanBoardId(planBoardFormDto.getPlanBoard().getPlanBoardId());
-			fileInfoDto.setSaveFolder(uploadDir);
-			fileInfoDto.setOriginalFile(file.getOriginalFilename());
-			fileInfoDto.setSaveFile(fileName);
-			PlanBoardFileInfoDto isExisted = planBoardMapper.fileInfo(planBoardFormDto.getPlanBoard().getPlanBoardId());
-			if (isExisted instanceof PlanBoardFileInfoDto)
-				planBoardMapper.updateFile(fileInfoDto);
-			else
-				planBoardMapper.registerFile(fileInfoDto);
-		} catch(IOException e) {
+			planBoardFormDto.getPlanBoard().setThumbnail(uploadFile(file));
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		planBoardMapper.modifyArticle(planBoardFormDto.getPlanBoard());
+		
 		planBoardMapper.deleteTag(planBoardFormDto.getPlanBoard().getPlanBoardId());
 		for (PlanBoardTagDto tag : planBoardFormDto.getTagList()) {
 			tag.setPlanBoardId(planBoardFormDto.getPlanBoard().getPlanBoardId());

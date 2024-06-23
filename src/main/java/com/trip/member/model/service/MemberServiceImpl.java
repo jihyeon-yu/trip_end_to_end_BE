@@ -16,12 +16,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.trip.member.model.dto.MemberFileInfoDto;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.trip.member.model.dto.MemberChangePasswordDto;
 import com.trip.member.model.dto.MemberDto;
 import com.trip.member.model.dto.MemberLoginRequestDto;
 import com.trip.member.model.mapper.MemberMapper;
 import com.trip.security.JwtUtil;
 import com.trip.security.TokenDto;
+
+import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -34,6 +39,12 @@ public class MemberServiceImpl implements MemberService {
 
     @Autowired
     private JwtUtil jwtUtil;
+    
+    @Autowired
+    private AmazonS3 s3Client;
+
+    @Value("${aws.s3.bucketName}")
+    private String bucketName;
     
     @Value("${upload.dir}") // application.properties에 저장된 파일 업로드 디렉토리 경로
 	private String uploadDir;
@@ -67,25 +78,12 @@ public class MemberServiceImpl implements MemberService {
             return false; // 아이디가 이미 존재하는 경우
         }
         memberDto.setPassword(passwordEncoder.encode(memberDto.getPassword()));
-        memberMapper.insertMember(memberDto);
-        String memberId = memberDto.getMemberId();
-        
-        // 프로필 이미지 설정
-		try {
-			Path uploadPath = Paths.get(uploadDir);
-			if (!Files.exists(uploadPath)) {
-				Files.createDirectories(uploadPath);
-			}
-			String fileName = generateImageUrl(file);
-			MemberFileInfoDto fileInfoDto = new MemberFileInfoDto();
-	        fileInfoDto.setMemberId(memberId);
-	        fileInfoDto.setSaveFolder(uploadDir);
-	        fileInfoDto.setOriginalFile(file.getOriginalFilename());
-	        fileInfoDto.setSaveFile(fileName);
-	        memberMapper.registerFile(fileInfoDto);
+        try {
+			memberDto.setImage(uploadFile(file));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+        memberMapper.insertMember(memberDto);
         return true;
     }
     
@@ -99,14 +97,13 @@ public class MemberServiceImpl implements MemberService {
     	return true;
     }
 
-    private String generateImageUrl(MultipartFile file) throws IOException {
-		if (file.isEmpty())
-			throw new IllegalArgumentException("File is Empty");
-		String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
-		File targetFile = new File(uploadDir, fileName);
-		file.transferTo(targetFile);
-		return fileName;
-	}
+    public String uploadFile(MultipartFile file) throws IOException {
+        String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentLength(file.getSize());
+        s3Client.putObject(bucketName, fileName, file.getInputStream(), metadata);
+        return s3Client.getUrl(bucketName, fileName).toString();
+    }
 
     
     @Override
@@ -133,26 +130,12 @@ public class MemberServiceImpl implements MemberService {
     	if (memberMapper.findById(memberDto.getId()) == null) {
             return false; // 해당 아이디가 존재하지 않는 경우
         }
-        memberMapper.updateMember(memberDto);
-        try {
-			Path uploadPath = Paths.get(uploadDir);
-			if (!Files.exists(uploadPath)) {
-				Files.createDirectories(uploadPath);
-			}
-			String fileName = generateImageUrl(file);
-			MemberFileInfoDto fileInfoDto = new MemberFileInfoDto();
-	        fileInfoDto.setMemberId(memberDto.getMemberId());
-	        fileInfoDto.setSaveFolder(uploadDir);
-	        fileInfoDto.setOriginalFile(file.getOriginalFilename());
-	        fileInfoDto.setSaveFile(fileName);
-	        MemberFileInfoDto isExisted = memberMapper.fileInfo(memberDto.getMemberId());
-	        if (isExisted instanceof MemberFileInfoDto)
-	        	memberMapper.updateFile(fileInfoDto);
-	        else
-	        	memberMapper.registerFile(fileInfoDto);
+    	try {
+			memberDto.setImage(uploadFile(file));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+        memberMapper.updateMember(memberDto);
         return true;
 	}
     @Override
