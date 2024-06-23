@@ -25,4 +25,5 @@ public class PlanBoardDto {
 	private String registerTime;
 	private String thumbnail;
 	private String hit;
+	private int likeCnt;
 }
