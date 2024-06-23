@@ -104,7 +104,8 @@
 		update plan_board
 		set
 		subject = #{subject}, content = #{content}, start_date = #{startDate},
-		end_date = #{endDate}, the_number_of_members = #{theNumberOfMembers}
+		end_date = #{endDate}, the_number_of_members = #{theNumberOfMembers},
+		thumbnail = #{thumbnail}
 		where plan_board_id = #{planBoardId}
 	</update>
 
