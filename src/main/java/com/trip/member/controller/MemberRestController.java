@@ -38,7 +38,6 @@ public class MemberRestController {
 			isRegistered = memberService.signup(memberDto);
 		}
 		if (isRegistered) {
-			System.out.println("회원가입완료");
 			return ResponseEntity.ok("회원가입이 완료되었습니다.");
 		} else {
 			return ResponseEntity.badRequest().body("회원가입에 실패하였습니다.");
@@ -47,7 +46,6 @@ public class MemberRestController {
 
 	@PostMapping("/login")
 	public ResponseEntity<TokenDto> login(@RequestBody MemberLoginRequestDto memberLoginRequestDto) {
-		System.out.println(memberLoginRequestDto);
 		TokenDto tokenDto = memberService.login(memberLoginRequestDto);
 		if (tokenDto != null) {
 			return ResponseEntity.ok(tokenDto);
@@ -78,7 +76,6 @@ public class MemberRestController {
 
 	@PutMapping("/delete/{id}")
 	public ResponseEntity<String> delete(@PathVariable String id) {
-		System.out.println(id);
 		boolean isDeleted = memberService.deleteMember(id);
 		if (isDeleted) {
 			return ResponseEntity.ok(id + " 삭제가 완료되었습니다.");
@@ -92,6 +89,8 @@ public class MemberRestController {
 	public ResponseEntity<String> updateMember(@PathVariable String id,
 			@RequestPart(name = "updateMember") MemberDto memberDto,
 			@RequestPart(name = "image", required = false) MultipartFile file) {
+		System.out.println(memberDto);
+		System.out.println(file);
 		memberDto.setId(id);
 		boolean isUpdated = false;
 		if (file != null) {
